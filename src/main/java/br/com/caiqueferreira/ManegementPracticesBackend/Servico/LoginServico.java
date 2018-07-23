@@ -1,23 +1,21 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.ResultadoAutuacao;
-import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.ResultadoAutuacaoRepositorio;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.LoginRepositorio;
 
 @Service
-public class ResultadoAutuacaoServico {
+public class LoginServico {
 
 	@Autowired
-	private ResultadoAutuacaoRepositorio resultadoAutuacaoRepositorio;
+	private LoginRepositorio  loginRepositorio;
 
-	public ResultadoAutuacao buscaPorRequisitorio(String numerorequisitorio) {
-		return resultadoAutuacaoRepositorio.buscaPorRequisitorio(numerorequisitorio);
+	public Integer VerificaAcesso(String Login, String Senha) {
+		return loginRepositorio.VerificaAcesso(Login,Senha);
 	}
-
+    
+	/*
 	public Integer atualizarPorRequisitorio(Integer CodDocEsparta, String NumProcEsparta, String Classe, String NumProc1Grau,
 			Date Dthrautuaenvio, Integer Codvara, String Vara, Integer Codcid, String Cidade, String CodUf,
 			String Autuado, Date Dthrautuacao, String DescErro, String Origem, String UsuIncl, Date DthrVerif,
@@ -26,4 +24,5 @@ public class ResultadoAutuacaoServico {
 				Dthrautuaenvio, Codvara, Vara, Codcid, Cidade, CodUf, Autuado, Dthrautuacao, DescErro, Origem, UsuIncl,
 				DthrVerif, Registrado1Grau,Numreq);
 	}
+    */
 }

@@ -9,14 +9,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.ResultadoAutuacao;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Login;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Notificacao;
 
 @Repository
-public interface ResultadoAutuacaoRepositorio extends JpaRepository<ResultadoAutuacao, Integer> {
+public interface LoginRepositorio extends JpaRepository<Login, Integer> {
 
-	@Query("SELECT u FROM ResultadoAutuacao u WHERE u.NUMREQ = :Numreq")
-	ResultadoAutuacao buscaPorRequisitorio(@Param("Numreq") String Numreq);    
+	@Query("SELECT count(1)  FROM Login u WHERE u.Login = :Login and u.Senha = :Senha")
+	Integer VerificaAcesso(@Param("Login") String Login, @Param("Senha") String Senha );   
 	
+	/*
 	@Transactional
 	@Modifying
 	@Query("UPDATE ResultadoAutuacao u SET u.CodDocEsparta  = :CodDocEsparta, u.NumProcEsparta = :NumProcEsparta,"
@@ -34,7 +36,7 @@ public interface ResultadoAutuacaoRepositorio extends JpaRepository<ResultadoAut
 			@Param("Dthrautuacao") Date Dthrautuacao, @Param("DescErro") String DescErro,
 			@Param("Origem") String Origem, @Param("UsuIncl") String UsuIncl, @Param("DthrVerif") Date DthrVerif,
 			@Param("Registrado1Grau") String Registrado1Grau,@Param("Numreq") String Numreq );
-
+  */
 	
 
 }

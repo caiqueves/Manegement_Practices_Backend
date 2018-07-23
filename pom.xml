@@ -44,27 +44,27 @@
 			<scope>test</scope>
 		 </dependency> 
 		 
-		  <!-- <dependency>
+		  <!-- h2 driver  -->
+		   <dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope> 
-		</dependency>  -->
+		</dependency>   
 		
 		 <!-- Oracle JDBC driver -->
-		 <!-- <dependency>
+	<!-- 	  <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc7</artifactId>
             <version>12.1.0.1</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/ojdbc7.jar</systemPath>
-        </dependency> -->	
+        </dependency>  -->	
 		
 		<!-- MySql driver -->
-		<dependency>
+		<!-- <dependency>
       		<groupId>mysql</groupId>
-      		<artifactId>mysql-connector-java</artifactId>
-      		
-    	</dependency>
+      		<artifactId>mysql-connector-java</artifactId>	
+    	</dependency> -->
 			
 	</dependencies>
 
