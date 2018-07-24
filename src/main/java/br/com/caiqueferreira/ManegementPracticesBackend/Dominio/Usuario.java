@@ -1,44 +1,41 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Dominio;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-@Table(name="Login")
-public class Login  implements Serializable{
+@Table(name="Usuario")
+public class Usuario  implements Serializable{
 
 	private static final long serialVersionUID = 1L;
     
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
-	/*
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "LOGIN_TIPOPERFIL",
-		joinColumns = @JoinColumn(name = "login_id"),
-		inverseJoinColumns = @JoinColumn(name = "tipoPerfil_id")
-	)*/
-	/*@OneToMany(mappedBy="Login", cascade=CascadeType.ALL)*/
-	//private List<TipoPerfil> tipoPerfis;
 	
+	
+	@OneToOne(cascade=CascadeType.ALL)
+    @JoinTable(name="usuario_perfil",
+              joinColumns={@JoinColumn(name="usuario_id",  
+               referencedColumnName="id")},  
+              inverseJoinColumns={@JoinColumn(name="perfil_id",   
+               referencedColumnName="id")})  
+	private TipoPerfil tipoPerfil;
+	
+
 	private String Login;
 	
 	private String Senha;
@@ -47,9 +44,9 @@ public class Login  implements Serializable{
 	
 	private String Email;
 
-	public Login () {}
+	public Usuario () {}
 	
-	public Login(Integer id,String login, String senha, String nome, String email) {
+	public Usuario(Integer id,String login, String senha, String nome, String email) {
 		super();
 		Id = id;
 		Login = login;
@@ -57,7 +54,6 @@ public class Login  implements Serializable{
 		Nome = nome;
 		Email = email;
 	}
-
 	
 	public Integer getId() {
 		return Id;
@@ -98,7 +94,4 @@ public class Login  implements Serializable{
 	public void setEmail(String email) {
 		Email = email;
 	}
-	
-	
-	
 }

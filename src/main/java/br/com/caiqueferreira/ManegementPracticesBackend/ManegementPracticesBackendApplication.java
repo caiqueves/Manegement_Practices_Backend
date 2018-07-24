@@ -1,28 +1,20 @@
 package br.com.caiqueferreira.ManegementPracticesBackend;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Login;
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoPerfil;
-import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.LoginRepositorio;
-import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.TipoPerfilRepositorio;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
+
 
 @SpringBootApplication
 public class ManegementPracticesBackendApplication implements CommandLineRunner {
     
 	@Autowired
-	private LoginRepositorio loginRepositorio;
-	
-	@Autowired
-	private TipoPerfilRepositorio tipoPerfilRepositorio;
-	
+	private UsuarioRepositorio loginRepositorio;
+		
 	public static void main(String[] args) {
 		SpringApplication.run(ManegementPracticesBackendApplication.class, args);
 	}
@@ -30,13 +22,8 @@ public class ManegementPracticesBackendApplication implements CommandLineRunner 
 	@Override
 	public void run(String... arg0) throws Exception {
 		
-		TipoPerfil tp1 = new   TipoPerfil(1, "Gerente");
-		TipoPerfil tp2 = new   TipoPerfil(2, "Desenvolvedor");
 		
-		
-		Login lg1 = new Login(1,"caiqueferreira", "123456", "caique ferreira", "caiqeu.sire@gmail.com");
-		
-		tipoPerfilRepositorio.saveAll(Arrays.asList(tp1,tp2));
+		Usuario lg1 = new Usuario(null,"caiqueferreira", "123456", "caique ferreira", "caiqeu.sire@gmail.com");
 		loginRepositorio.save(lg1);
 		
 	}

@@ -1,20 +1,18 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Dominio;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name="TipoPerfil")
@@ -30,10 +28,14 @@ public class TipoPerfil  implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
 	
-/*	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name="Login_id")
-	private Login login;*/
+	@OneToMany(cascade=CascadeType.ALL)  
+    @JoinTable(name="usuario_perfil",  
+              joinColumns={@JoinColumn(name="perfil_id", 
+               referencedColumnName="id")},  
+              inverseJoinColumns={@JoinColumn(name="usuario_id", 
+                referencedColumnName="id")}) 
+	
+	private List<Usuario> usuarios;
 
 	private String Descricao;
 	
