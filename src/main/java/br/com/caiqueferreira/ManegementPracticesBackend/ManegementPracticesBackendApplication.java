@@ -1,6 +1,7 @@
 package br.com.caiqueferreira.ManegementPracticesBackend;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +30,14 @@ public class ManegementPracticesBackendApplication implements CommandLineRunner 
 	@Override
 	public void run(String... arg0) throws Exception {
 		
-		
 		TipoPerfil tp1 = new   TipoPerfil(1, "Gerente");
-		
-		tipoPerfilRepositorio.save(tp1);
-		
-		List<TipoPerfil> tipoperfil2 = new ArrayList<>();
-		tipoperfil2.add(tp1);
+		TipoPerfil tp2 = new   TipoPerfil(2, "Desenvolvedor");
 		
 		
-		Login lg1 = new Login(1,1 "caiqueferreira", "123456", "caique ferreira", "caiqeu.sire@gmail.com");
+		Login lg1 = new Login(1,"caiqueferreira", "123456", "caique ferreira", "caiqeu.sire@gmail.com");
 		
+		tipoPerfilRepositorio.saveAll(Arrays.asList(tp1,tp2));
 		loginRepositorio.save(lg1);
-		
 		
 	}
 }

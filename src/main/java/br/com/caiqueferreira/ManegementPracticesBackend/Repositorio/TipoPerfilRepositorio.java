@@ -10,6 +10,6 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoPerfil;
 @Repository
 public interface TipoPerfilRepositorio extends JpaRepository<TipoPerfil, Integer> {
 
-	@Query("SELECT * FROM TipoPerfil u WHERE u.Id = :Id")
+	@Query("SELECT u FROM TipoPerfil u WHERE u.Id = :Id")
 	TipoPerfil buscaPorId(@Param("Id") Integer Id );   
 }

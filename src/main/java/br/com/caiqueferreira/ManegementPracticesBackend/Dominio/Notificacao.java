@@ -16,7 +16,7 @@ public class Notificacao implements Serializable{
 
 	@Id
 	@Column(insertable=false, updatable=false)
-	private String Id;
+	private Long Id;
 	
 	
 	private String Descricao;

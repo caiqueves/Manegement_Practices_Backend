@@ -45,11 +45,11 @@
 		 </dependency> 
 		 
 		  <!-- h2 driver  -->
-		   <dependency>
+		<!--    <dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope> 
-		</dependency>   
+		</dependency>   --> 
 		
 		 <!-- Oracle JDBC driver -->
 	<!-- 	  <dependency>
@@ -61,11 +61,11 @@
         </dependency>  -->	
 		
 		<!-- MySql driver -->
-		<!-- <dependency>
+		 <dependency>
       		<groupId>mysql</groupId>
       		<artifactId>mysql-connector-java</artifactId>	
-    	</dependency> -->
-			
+    	</dependency> 
+	 
 	</dependencies>
 
 	<build>

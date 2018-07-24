@@ -1,5 +1,6 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.DTO;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -23,6 +24,7 @@ public class LoginDTO {
 	private String Nome;
 	
 	@NotEmpty(message="Preenchimento obrigatório")
+	@Email
 	private String Email;
 	
 	

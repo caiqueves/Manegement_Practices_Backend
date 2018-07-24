@@ -4,24 +4,40 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
-
+@Entity
+@Table(name="Login")
 public class Login  implements Serializable{
 
 	private static final long serialVersionUID = 1L;
     
 	@Id
-	@Column(insertable=false, updatable=false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
-	
-	@OneToMany
-	@JoinColumn(name="TipoPerfil_id")
-	private List<TipoPerfil> tipoPerfil = new ArrayList<>();
+	/*
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "LOGIN_TIPOPERFIL",
+		joinColumns = @JoinColumn(name = "login_id"),
+		inverseJoinColumns = @JoinColumn(name = "tipoPerfil_id")
+	)*/
+	/*@OneToMany(mappedBy="Login", cascade=CascadeType.ALL)*/
+	//private List<TipoPerfil> tipoPerfis;
 	
 	private String Login;
 	
@@ -49,14 +65,6 @@ public class Login  implements Serializable{
 
 	public void setId(Integer id) {
 		Id = id;
-	}
-
-	public List<TipoPerfil> getTipoPerfil() {
-		return tipoPerfil;
-	}
-
-	public void setTipoPerfil(List<TipoPerfil> tipoPerfil) {
-		this.tipoPerfil = tipoPerfil;
 	}
 
 	public String getLogin() {
