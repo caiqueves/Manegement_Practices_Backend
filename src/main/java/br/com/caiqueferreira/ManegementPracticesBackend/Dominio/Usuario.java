@@ -1,20 +1,16 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Dominio;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="Usuario")
@@ -25,16 +21,6 @@ public class Usuario  implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
-	
-	
-	@OneToOne(cascade=CascadeType.ALL)
-    @JoinTable(name="usuario_perfil",
-              joinColumns={@JoinColumn(name="usuario_id",  
-               referencedColumnName="id")},  
-              inverseJoinColumns={@JoinColumn(name="perfil_id",   
-               referencedColumnName="id")})  
-	private TipoPerfil tipoPerfil;
-	
 
 	private String Login;
 	
@@ -44,9 +30,15 @@ public class Usuario  implements Serializable{
 	
 	private String Email;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="perfil_id")
+	private Perfil perfil;
+	
+	
 	public Usuario () {}
 	
-	public Usuario(Integer id,String login, String senha, String nome, String email) {
+	public Usuario(Integer id, String login, String senha, String nome, String email) {
 		super();
 		Id = id;
 		Login = login;
@@ -61,6 +53,14 @@ public class Usuario  implements Serializable{
 
 	public void setId(Integer id) {
 		Id = id;
+	}
+	
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 
 	public String getLogin() {
