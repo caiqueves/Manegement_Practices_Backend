@@ -15,7 +15,14 @@ public class UsuarioServico {
 	private UsuarioRepositorio  usuarioRepositorio;
     
 	public Usuario fromDTO(CriarUsuarioDTO objDto) {
-		return new Usuario(null, objDto.getLogin(),objDto.getSenha(),objDto.getNome(), objDto.getEmail());
+		return new Usuario(null, objDto.getLogin(),objDto.getSenha(),objDto.getNome(), objDto.getEmail(), null);
+	}
+	
+	public Integer ExisteUsuario (Usuario objUsuario) {
+		Integer retorno = 0;
+		retorno = usuarioRepositorio.ExisteUsuario(objUsuario.getLogin(),objUsuario.getNome(),null);
+		return retorno;
+		
 	}
 	
 	public Usuario CriarLogin(Usuario obj) {

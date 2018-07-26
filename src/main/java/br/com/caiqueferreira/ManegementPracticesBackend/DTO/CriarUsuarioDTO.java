@@ -8,9 +8,10 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Perfil;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 
-@JsonPropertyOrder(value = {"Login", "Senha", "Nome", "Email"})
+@JsonPropertyOrder(value = {"Login", "Senha", "Nome", "Email","perfil"})
 public class CriarUsuarioDTO {
     
 
@@ -27,6 +28,8 @@ public class CriarUsuarioDTO {
 	@Email(message = "Email não é válido")
 	private String email;
 	
+	@NotNull
+	private Integer perfil_id;
 	
 	public CriarUsuarioDTO() {}
     
@@ -35,7 +38,9 @@ public class CriarUsuarioDTO {
 		
 		login = obj.getLogin();
 		senha = obj.getSenha();
+		nome  = obj.getNome();
 		email = obj.getEmail();
+		perfil_id = obj.getPerfil();
 	}
 
 
@@ -85,6 +90,17 @@ public class CriarUsuarioDTO {
 		this.email = email;
 	}
 
+
+	public Perfil getPerfil() {
+		return perfil;
+	}
+
+
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
+	}
+    
+	
 
 
 

@@ -33,8 +33,7 @@ public class ManegementPracticesBackendApplication implements CommandLineRunner 
 		
 		perfilRepositorio.saveAll(Arrays.asList(pe1, pe2));
 		
-		Usuario lg1 = new Usuario(null,"caiqueferreira", "123456", "caique ferreira", "caique.sire@gmail.com");
-		lg1.setPerfil(pe1);
+		Usuario lg1 = new Usuario(null,"caiqueferreira", "123456", "caique ferreira", "caique.sire@gmail.com",pe1);
 		
 		usuarioRepositorio.save(lg1);
 		

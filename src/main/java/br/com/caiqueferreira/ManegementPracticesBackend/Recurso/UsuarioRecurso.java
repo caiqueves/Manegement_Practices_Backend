@@ -1,6 +1,5 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Recurso;
 
-
 import java.net.URI;
 
 import javax.validation.Valid;
@@ -19,43 +18,44 @@ import br.com.caiqueferreira.ManegementPracticesBackend.DTO.CriarUsuarioDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.UsuarioServico;
 
-
 @RestController
 @RequestMapping(value = "/Login")
 public class UsuarioRecurso {
- 
+
 	@Autowired
-	private  UsuarioServico loginServico;
-	
+	private UsuarioServico loginServico;
 
-	@RequestMapping(value="/Criar",method=RequestMethod.POST)
-	public ResponseEntity<Void> CriarLogin(@Valid @RequestBody CriarUsuarioDTO objLoginDto) {
-		try {
-		Usuario obj = loginServico.fromDTO(objLoginDto);
+	@RequestMapping(value = "/Criar", method = RequestMethod.POST)
+	public ResponseEntity<Void> CriarLogin(@Valid @RequestBody CriarUsuarioDTO objLoginDto) throws Exception {
 		
-		obj = loginServico.CriarLogin(obj);
-		 
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(obj.getId()).toUri();
-			return ResponseEntity.created(uri).build();
-			
-		}catch(Exception e){
-		  
-		}
-		
-		finally
-		{
-			
-		}
-		return null;	
-    }
-	
+			Usuario obj = loginServico.fromDTO(objLoginDto);
 
-	/*@RequestMapping(value="/ListaPermissoes",method = RequestMethod.GET)
-	public ResponseEntity<Integer> FazerLogin(@RequestParam("Login") String Login,@RequestParam("Senha") String Senha) throws Exception {
+			Integer retorno = loginServico.ExisteUsuario(obj);
+
+			if (retorno == 0) {
+
+				obj = loginServico.CriarLogin(obj);
+
+				URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId())
+						.toUri();
+				return ResponseEntity.created(uri).build();
+			}
+			else
+			{
+			  throw new Exception ("Não foi possivel ")	;
+			}
+	
 		
-		Integer TemAcesso = loginServico.FazerLogin(Login,Senha);
 		
-		return ResponseEntity.ok().body(TemAcesso);
-	}*/
+	}
+
+	/*
+	 * @RequestMapping(value="/ListaPermissoes",method = RequestMethod.GET) public
+	 * ResponseEntity<Integer> FazerLogin(@RequestParam("Login") String
+	 * Login,@RequestParam("Senha") String Senha) throws Exception {
+	 * 
+	 * Integer TemAcesso = loginServico.FazerLogin(Login,Senha);
+	 * 
+	 * return ResponseEntity.ok().body(TemAcesso); }
+	 */
 }

@@ -13,7 +13,7 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 @Repository
 public interface UsuarioRepositorio extends JpaRepository<Usuario, Integer> {
 
-	@Query("SELECT count(1) FROM Usuario u WHERE u.Login = :Login and u.Senha = :Senha")
-	Integer FazerLogin(@Param("Login") String Login, @Param("Senha") String Senha );   
+	@Query("SELECT count(1) FROM Usuario u WHERE u.Login = :Login and u.Nome = :Nome and u.Email = :Email")
+	Integer ExisteUsuario(@Param("Login") String Login, @Param("Nome") String Nome, @Param("Email") String Email);   
 	
 }

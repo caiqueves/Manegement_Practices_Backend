@@ -8,14 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name="Perfil")
@@ -27,36 +24,28 @@ public class Perfil  implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
 	private String Descricao;
-	
-/*	@OneToMany(cascade=CascadeType.ALL)  
-    @JoinTable(name="usuario_perfil",  
-              joinColumns={@JoinColumn(name="perfil_id", 
-               referencedColumnName="id")},  
-              inverseJoinColumns={@JoinColumn(name="usuario_id", 
-                referencedColumnName="id")}) */
-	
+		
 	@OneToMany(mappedBy="perfil")
 	private List<Usuario> usuario;
     
 	
-	/*@JsonIgnore
-	@ManyToMany
-	    @JoinTable(name = "perfil_tipoNotificacao",
-	        joinColumns = @JoinColumn(name = "perfil_id"),
-	        inverseJoinColumns = @JoinColumn(name = "tipoNotificacao_id")
-	    )*/
-	//private List<TipoNotificacao> tipoNotificacao;
+	@ManyToMany(cascade=CascadeType.ALL)  
+    @JoinTable(name="perfil_tiponotificacao",  
+              joinColumns={@JoinColumn(name="perfil_id", 
+               referencedColumnName="id")},  
+              inverseJoinColumns={@JoinColumn(name="tiponotificacao_id", 
+                referencedColumnName="id")}) 
+	private List<TipoNotificacao> listipoNotificacao;
 	
 	
 	public Perfil () {}
 
 	
 
-	public Perfil(Integer id, String descricao, List<Usuario> usuario) {
+	public Perfil(Integer id, String descricao) {
 		super();
 		Id = id;
 		Descricao = descricao;
-		this.usuario = usuario;
 	}
 
 

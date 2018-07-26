@@ -23,8 +23,8 @@ public class TipoNotificacao {
 
 	private String Descricao;
 
-	//@ManyToMany(mappedBy = "tipoNotificacao")
-	//private List<Perfil> perfil;
+	@ManyToMany(mappedBy = "listipoNotificacao")
+	private List<Perfil> perfil;
 	
 	/*@OneToMany(cascade=CascadeType.ALL)  
     @JoinTable(name="TipoNotificacao_Notificacao",  

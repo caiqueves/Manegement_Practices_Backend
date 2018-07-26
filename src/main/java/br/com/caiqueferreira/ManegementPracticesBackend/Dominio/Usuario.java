@@ -21,7 +21,8 @@ public class Usuario  implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
-
+    
+	
 	private String Login;
 	
 	private String Senha;
@@ -38,15 +39,18 @@ public class Usuario  implements Serializable{
 	
 	public Usuario () {}
 	
-	public Usuario(Integer id, String login, String senha, String nome, String email) {
+
+	public Usuario(Integer id, String login, String senha, String nome, String email, Perfil perfil) {
 		super();
 		Id = id;
 		Login = login;
 		Senha = senha;
 		Nome = nome;
 		Email = email;
+		this.perfil = perfil;
 	}
-	
+
+
 	public Integer getId() {
 		return Id;
 	}
