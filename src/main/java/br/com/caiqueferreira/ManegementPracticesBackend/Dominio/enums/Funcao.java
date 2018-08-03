@@ -28,18 +28,18 @@ public enum Funcao {
 		this.descricao = descricao;
 	}
 
-	public static Funcao toEnum(Integer cod) {
+	public static Funcao toEnum(Integer integer) {
 
-		if (cod == null) {
+		if (integer == null) {
 			return null;
 		}
 
 		for (Funcao x : Funcao.values()) {
-			if (cod.equals(x.getCod())) {
+			if (integer.equals(x.getCod())) {
 				return x;
 			}
 		}
 
-		throw new IllegalArgumentException("Id inválido: " + cod);
+		throw new IllegalArgumentException("Id inválido: " + integer);
 	}
 }

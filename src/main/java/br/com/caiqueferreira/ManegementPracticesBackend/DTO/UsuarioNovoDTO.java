@@ -1,9 +1,13 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.DTO;
 
+import java.util.List;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
+
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
 
 public class UsuarioNovoDTO {
 
@@ -25,6 +29,7 @@ public class UsuarioNovoDTO {
 	@NotEmpty(message="Preenchimento obrigatório")
 	private String senha;
 
+	private List<Integer> listaTipoMetodologia; 
 	
 	public Integer getId() {
 		return id;
@@ -58,14 +63,20 @@ public class UsuarioNovoDTO {
 		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
-	
-
 	public Integer getTipoFuncao() {
 		return tipoFuncao;
 	}
 
 	public void setTipoFuncao(Integer tipoFuncao) {
 		this.tipoFuncao = tipoFuncao;
+	}
+
+	public List<Integer> getListaTipoMetodologia() {
+		return listaTipoMetodologia;
+	}
+
+	public void setListaTipoMetodologia(List<Integer> listaTipoMetodologia) {
+		this.listaTipoMetodologia = listaTipoMetodologia;
 	}
 
 	public String getSenha() {

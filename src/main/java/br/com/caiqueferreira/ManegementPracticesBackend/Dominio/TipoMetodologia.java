@@ -13,6 +13,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "TipoMetodologia")
 public class TipoMetodologia implements Serializable {
@@ -24,14 +26,14 @@ public class TipoMetodologia implements Serializable {
 	private Integer id;
 	private String descricao;
 	
-	@ManyToMany(mappedBy="tipoMetodologias")
+	@JsonIgnore
+	@ManyToMany(mappedBy="listaTipoMetodologia")
     private List<Usuario> usuarios = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="tipoMetodologia", cascade=CascadeType.ALL)
 	private List<Pratica> praticas = new ArrayList<>();
     
-    
-	
 	public TipoMetodologia() {
 
 	}
@@ -73,6 +75,4 @@ public class TipoMetodologia implements Serializable {
 	public void setPraticas(List<Pratica> praticas) {
 		this.praticas = praticas;
 	}
-
-	
 }

@@ -51,17 +51,18 @@ public class Usuario implements Serializable {
 	@CollectionTable(name = "PERFIL_USUARIO")
 	private Set<Integer> Perfil_ID = new HashSet<>();
 
-	@JsonIgnore
+	
 	@ManyToMany
 	@JoinTable(name = "Usuario_TipoMetodologia", joinColumns = {
 			@JoinColumn(name = "id_usuario") }, inverseJoinColumns = { @JoinColumn(name = "id_tipoMetodologia") })
-	private List<TipoMetodologia> tipoMetodologias = new ArrayList<>();
+	private List<TipoMetodologia> listaTipoMetodologia = new ArrayList<>();
 
 	public Usuario() {
 		addPerfil(Perfil.USUARIO);
 	}
 
-	public Usuario(Integer id, String nome, String email, String cpfOuCnpj, Funcao tipoFuncao, String senha) {
+	public Usuario(Integer id, String nome, String email, String cpfOuCnpj, Funcao tipoFuncao, String senha) 
+	{
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -104,7 +105,6 @@ public class Usuario implements Serializable {
 		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
-
 	public Funcao getTipoFuncao() {
 		return Funcao.toEnum(tipoFuncao);
 	}
@@ -120,13 +120,13 @@ public class Usuario implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
-	public List<TipoMetodologia> getTipoMetodologias() {
-		return tipoMetodologias;
+    
+	public List<TipoMetodologia> getListaTipoMetodologia() {
+		return listaTipoMetodologia;
 	}
 
-	public void setTipoMetodologias(List<TipoMetodologia> tipoMetodologias) {
-		this.tipoMetodologias = tipoMetodologias;
+	public void setListaTipoMetodologia(List<TipoMetodologia> listaTipoMetodologia) {
+		this.listaTipoMetodologia = listaTipoMetodologia;
 	}
 
 	public Set<Perfil> getPerfis() {
@@ -161,5 +161,4 @@ public class Usuario implements Serializable {
 			return false;
 		return true;
 	}
-
 }
