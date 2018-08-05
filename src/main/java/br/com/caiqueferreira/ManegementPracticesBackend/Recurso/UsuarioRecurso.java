@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +26,9 @@ public class UsuarioRecurso {
 	@Autowired
 	private UsuarioServico servico;	
 
-	
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Usuario> findAll(@PathVariable Integer id) {
+	public ResponseEntity<Usuario> find(@PathVariable Integer id) {
 		Usuario obj = servico.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
@@ -41,6 +42,7 @@ public class UsuarioRecurso {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
 		Usuario obj = servico.fromDTO(objDto);
@@ -49,6 +51,7 @@ public class UsuarioRecurso {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		servico.delete(id);

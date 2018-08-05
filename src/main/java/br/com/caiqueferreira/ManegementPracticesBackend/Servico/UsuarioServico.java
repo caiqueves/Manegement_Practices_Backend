@@ -36,18 +36,6 @@ public class UsuarioServico {
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
-	public Usuario find(Integer id) {
-
-		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
-			throw new AuthorizationException("Acesso negado");
-		}
-
-		Optional<Usuario> obj = usuarioRepositorio.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
-	}
-
 	@Transactional
 	public Usuario insert(Usuario obj) {
 
@@ -62,11 +50,10 @@ public class UsuarioServico {
 		return obj;
 	}
 
-	
 	public Usuario update(Usuario obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN) && !obj.getId().equals(user.getId())) {
+		if (user == null || (!user.hasRole(Perfil.ADMIN) && !obj.getId().equals(user.getId()))) {
 			throw new AuthorizationException("Acesso negado");
 		}
 
@@ -79,7 +66,7 @@ public class UsuarioServico {
 	public void delete(Integer id) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+		if (user == null || (!user.hasRole(Perfil.ADMIN) && !id.equals(user.getId()))) {
 			throw new AuthorizationException("Acesso negado");
 		}
 
@@ -91,10 +78,22 @@ public class UsuarioServico {
 		}
 	}
 
+	public Usuario find(Integer id) {
+
+		UserSS user = UserService.authenticated();
+		if (user == null || (!user.hasRole(Perfil.ADMIN) && !id.equals(user.getId()))) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		Optional<Usuario> obj = usuarioRepositorio.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
+	}
+
 	public List<Usuario> findAll() {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || user.hasRole(Perfil.ADMIN)) {
+		if (user == null || (user.hasRole(Perfil.ADMIN))) {
 			throw new AuthorizationException("Acesso negado");
 		}
 
@@ -103,7 +102,7 @@ public class UsuarioServico {
 
 	public Usuario findByEmail(String email) {
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+		if (user == null || (!user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername()))) {
 			throw new AuthorizationException("Acesso negado");
 		}
 
