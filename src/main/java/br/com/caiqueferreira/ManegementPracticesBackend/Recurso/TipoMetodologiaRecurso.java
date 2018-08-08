@@ -40,7 +40,7 @@ public class TipoMetodologiaRecurso {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	//@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody TipoMetodologiaDTO objDto, @PathVariable Integer id) {
 		TipoMetodologia obj = servico.fromDTO(objDto);

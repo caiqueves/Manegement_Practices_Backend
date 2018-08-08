@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
-import br.com.caiqueferreira.ManegementPracticesBackend.Security.UserSS;
+import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

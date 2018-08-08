@@ -1,6 +1,5 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,13 +10,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.TipoMetodologiaDTO;
-import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Funcao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
 import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.TipoMetodologiaRepositorio;
-import br.com.caiqueferreira.ManegementPracticesBackend.Security.UserSS;
+import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthorizationException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
@@ -33,25 +29,25 @@ public class TipoMetodologiaServico {
 	public TipoMetodologia insert(TipoMetodologia obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || (user.hasRole(Perfil.ADMIN) && !obj.getId().equals(user.getId()))) {
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("Acesso negado");
 		}
 
-		if (repositorio.findByDescricao(obj.getDescricao()) == null) {
-			obj.setId(null);
-			obj = repositorio.save(obj);
-		} else {
-			throw new Excecao(
-					"Já existe um cadastro de metodologia, para a descrição:" + obj.getDescricao() + " informada");
-		}
+		find(obj.getId());
+		obj.setId(null);
+		obj = repositorio.save(obj);
 		return obj;
 	}
 
 	public TipoMetodologia update(TipoMetodologia obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || (user.hasRole(Perfil.ADMIN) && !obj.getId().equals(user.getId()))) {
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("Acesso negado");
+		}
+
+		if (repositorio.findByDescricao(obj.getDescricao()) != null) {
+			throw new Excecao("Já existe um cadastro para a Descrição: " + obj.getDescricao() + " informado.");
 		}
 
 		TipoMetodologia newObj = find(obj.getId());
@@ -63,7 +59,7 @@ public class TipoMetodologiaServico {
 	public void delete(Integer id) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || (user.hasRole(Perfil.ADMIN) && !id.equals(user.getId()))) {
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("Acesso negado");
 		}
 
@@ -71,12 +67,11 @@ public class TipoMetodologiaServico {
 		try {
 			repositorio.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir a metodologia !");
+			throw new DataIntegrityException("Não é possível excluir o tipo de metodologia.");
 		}
 	}
 
 	public TipoMetodologia find(Integer id) {
-
 		Optional<TipoMetodologia> obj = repositorio.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + TipoMetodologia.class.getName()));
@@ -85,20 +80,20 @@ public class TipoMetodologiaServico {
 	public List<TipoMetodologia> findAll() {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || (user.hasRole(Perfil.ADMIN))) {
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("Acesso negado");
 		}
 
 		return repositorio.findAll();
 	}
 
-	private void updateData(TipoMetodologia newObj, TipoMetodologia obj) {
-
-		newObj.setDescricao(obj.getDescricao());
-	}
-
 	public TipoMetodologia fromDTO(TipoMetodologiaDTO objDto) {
 		TipoMetodologia TipMet = new TipoMetodologia(null, objDto.getDescricao());
 		return TipMet;
+	}
+
+	private void updateData(TipoMetodologia newObj, TipoMetodologia obj) {
+
+		newObj.setDescricao(obj.getDescricao());
 	}
 }

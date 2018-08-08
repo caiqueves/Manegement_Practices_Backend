@@ -2,7 +2,7 @@ package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Security.UserSS;
+import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
 
 public class UserService {
 	

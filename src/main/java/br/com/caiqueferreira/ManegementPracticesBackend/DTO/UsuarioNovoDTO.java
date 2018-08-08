@@ -1,35 +1,44 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.DTO;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.UsuarioInserir;
 
-public class UsuarioNovoDTO {
+@UsuarioInserir
+public class UsuarioNovoDTO implements Serializable {
+
+	
+	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "Por favor, informe o nome. Preenchimento obrigatório !")
 	@Length(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres")
 	private String nome;
 
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "Preenchimento obrigatório !")
 	@Email(message = "Email inválido")
 	private String email;
 	
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "Por favor, informe o Cpf Ou Cnpj. Preenchimento obrigatório !")
 	private String cpfOuCnpj;
+	
 	
 	private Integer tipoFuncao;
 		
-	@NotEmpty(message="Preenchimento obrigatório")
+	@NotEmpty(message="Por favor, informe a senha. Preenchimento obrigatório !")
 	private String senha;
 
+	
 	private List<Integer> listaTipoMetodologia; 
+	
 	
 	public Integer getId() {
 		return id;

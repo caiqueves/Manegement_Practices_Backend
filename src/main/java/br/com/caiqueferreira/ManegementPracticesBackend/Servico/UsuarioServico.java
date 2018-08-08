@@ -18,11 +18,12 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Funcao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
 import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
-import br.com.caiqueferreira.ManegementPracticesBackend.Security.UserSS;
+import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthorizationException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNotFoundException;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Mensagens.Mensagem;
 
 @Service
 public class UsuarioServico {
@@ -35,6 +36,15 @@ public class UsuarioServico {
 
 	@Autowired
 	private BCryptPasswordEncoder pe;
+
+	public Usuario find(Integer id) {
+
+		ValidarPerfil(id);
+
+		Optional<Usuario> obj = usuarioRepositorio.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
+	}
 
 	@Transactional
 	public Usuario insert(Usuario obj) {
@@ -52,66 +62,49 @@ public class UsuarioServico {
 
 	public Usuario update(Usuario obj) {
 
-		UserSS user = UserService.authenticated();
-		if (user == null || (!user.hasRole(Perfil.ADMIN) && !obj.getId().equals(user.getId()))) {
-			throw new AuthorizationException("Acesso negado");
+		ValidarPerfil(obj.getId());
+
+		if (usuarioRepositorio.findByEmail(obj.getEmail()) != null) {
+			throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
 		}
 
-		Usuario newObj = find(obj.getId());
-		updateData(newObj, obj);
-		usuarioRepositorio.save(newObj);
-		return newObj;
+		try {
+			Usuario newObj = find(obj.getId());
+			updateData(newObj, obj);
+			usuarioRepositorio.save(newObj);
+			return newObj;
+
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não foi possivel alterar o USUARIO. Tipo: " + e.getMessage());
+		} finally {
+			try {
+
+			} catch (Mensagem e) {
+				throw new Mensagem("Usuário alterado com Sucesso !");
+			}
+		}
 	}
 
 	public void delete(Integer id) {
 
-		UserSS user = UserService.authenticated();
-		if (user == null || (!user.hasRole(Perfil.ADMIN) && !id.equals(user.getId()))) {
-			throw new AuthorizationException("Acesso negado");
-		}
+		ValidarPerfil(id);
 
 		find(id);
 		try {
 			usuarioRepositorio.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir o usuário !");
+			throw new DataIntegrityException("Não foi possível excluir o USUARIO. Tipo:  " + e.getMessage());
 		}
-	}
-
-	public Usuario find(Integer id) {
-
-		UserSS user = UserService.authenticated();
-		if (user == null || (!user.hasRole(Perfil.ADMIN) && !id.equals(user.getId()))) {
-			throw new AuthorizationException("Acesso negado");
-		}
-
-		Optional<Usuario> obj = usuarioRepositorio.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
 	}
 
 	public List<Usuario> findAll() {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || (user.hasRole(Perfil.ADMIN))) {
-			throw new AuthorizationException("Acesso negado");
+		if (user == null || user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
 		}
 
 		return usuarioRepositorio.findAll();
-	}
-
-	public Usuario findByEmail(String email) {
-		UserSS user = UserService.authenticated();
-		if (user == null || (!user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername()))) {
-			throw new AuthorizationException("Acesso negado");
-		}
-
-		Usuario obj = usuarioRepositorio.findByEmail(email);
-		if (obj == null) {
-			throw new ObjectNotFoundException(
-					"Objeto não encontrado! Id: " + user.getId() + ", Tipo: " + Usuario.class.getName());
-		}
-		return obj;
 	}
 
 	public Usuario fromDTO(UsuarioNovoDTO objDto) {
@@ -119,8 +112,8 @@ public class UsuarioServico {
 		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(),
 				Funcao.toEnum(objDto.getTipoFuncao()), pe.encode(objDto.getSenha()));
 
-		if ((objDto.getListaTipoMetodologia().isEmpty())) {
-			throw new Excecao("É necessário informar pelo menos um tipo de metodologia");
+		if (objDto.getListaTipoMetodologia() == null) {
+			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
 		}
 
 		List<TipoMetodologia> listTpMetodologia = new ArrayList<>();
@@ -138,8 +131,8 @@ public class UsuarioServico {
 		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), null, null, Funcao.toEnum(objDto.getTipoFuncao()),
 				pe.encode(objDto.getSenha()));
 
-		if ((objDto.getListaTipoMetodologia().isEmpty())) {
-			throw new Excecao("É necessário informar pelo menos um tipo de metodologia");
+		if (objDto.getListaTipoMetodologia() == null) {
+			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
 		}
 
 		List<TipoMetodologia> listTpMetodologia = new ArrayList<>();
@@ -156,8 +149,17 @@ public class UsuarioServico {
 	private void updateData(Usuario newObj, Usuario obj) {
 
 		newObj.setNome(obj.getNome());
+		newObj.setEmail(obj.getEmail());
 		newObj.setTipoFuncao(obj.getTipoFuncao());
 		newObj.setSenha(obj.getSenha());
 		newObj.setListaTipoMetodologia(obj.getListaTipoMetodologia());
+	}
+
+	public AuthorizationException ValidarPerfil(Integer id) {
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("O seu PERFIL, não permite consultar, alterar e Deleta outros USUARIOS.");
+		}
+		return null;
 	}
 }

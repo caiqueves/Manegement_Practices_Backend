@@ -7,13 +7,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 
 
 @Repository
 public interface TipoMetodologiaRepositorio extends JpaRepository<TipoMetodologia, Integer> {
 
 	@Transactional(readOnly=true)
-	Usuario findByDescricao(String descricao);
+	TipoMetodologia findByDescricao(String descricao);
 	
 }

@@ -1,4 +1,4 @@
-package br.com.caiqueferreira.ManegementPracticesBackend.Config;
+package br.com.caiqueferreira.ManegementPracticesBackend.Configuracao;
 
 import java.util.Arrays;
 
@@ -19,14 +19,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Security.JWTAuthenticationFilter;
-import br.com.caiqueferreira.ManegementPracticesBackend.Security.JWTAuthorizationFilter;
-import br.com.caiqueferreira.ManegementPracticesBackend.Security.JWTUtil;
+import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.JWTAuthenticationFilter;
+import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.JWTAuthorizationFilter;
+import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SegurancaConfiguracao extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -46,8 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	};
 
 	private static final String[] PUBLIC_MATCHERS_POST = {
-			"/usuario/**",
-			"/auth/forgot/**",			
+			"/usuario/**",			
 	};
 
 	@Override

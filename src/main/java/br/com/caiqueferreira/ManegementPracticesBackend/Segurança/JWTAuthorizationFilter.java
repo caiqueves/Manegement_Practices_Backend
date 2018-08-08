@@ -1,4 +1,4 @@
-package br.com.caiqueferreira.ManegementPracticesBackend.Security;
+package br.com.caiqueferreira.ManegementPracticesBackend.Segurança;
 
 import java.io.IOException;
 

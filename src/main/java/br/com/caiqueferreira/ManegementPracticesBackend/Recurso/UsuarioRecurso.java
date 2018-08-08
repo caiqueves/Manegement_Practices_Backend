@@ -26,7 +26,7 @@ public class UsuarioRecurso {
 	@Autowired
 	private UsuarioServico servico;	
 
-	@PreAuthorize("hasAnyRole('USUARIO')")
+	//@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Usuario> find(@PathVariable Integer id) {
 		Usuario obj = servico.find(id);
@@ -42,7 +42,7 @@ public class UsuarioRecurso {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PreAuthorize("hasAnyRole('USUARIO')")
+	//@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
 		Usuario obj = servico.fromDTO(objDto);
@@ -51,7 +51,7 @@ public class UsuarioRecurso {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PreAuthorize("hasAnyRole('USUARIO')")
+	//@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		servico.delete(id);
