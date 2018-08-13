@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -12,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 
-@JsonPropertyOrder({"id","nome","email","tipoFuncao","senha"})
+@JsonPropertyOrder({"id","nome","email","tipoFuncao","senha","listaTipoMetodologia"})
 public class UsuarioDTO {
 
 	private Integer id;
@@ -90,4 +89,6 @@ public class UsuarioDTO {
 	public void setListaTipoMetodologia(List<Integer> listaTipoMetodologia) {
 		this.listaTipoMetodologia = listaTipoMetodologia;
 	}
+
+	
 }

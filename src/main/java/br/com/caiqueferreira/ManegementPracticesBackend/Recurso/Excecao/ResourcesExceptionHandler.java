@@ -1,6 +1,7 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Recurso.Excecao;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -52,14 +53,7 @@ public class ResourcesExceptionHandler {
 	@ExceptionHandler(Excecao.class)
 	public ResponseEntity<StantardError> excecao(Excecao e, HttpServletRequest request) {
 	 
-      StantardError err = new StantardError(HttpStatus.BAD_REQUEST.value(),e.getMessage(), System.currentTimeMillis());
-	  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
-   }
-	
-	@ExceptionHandler(Mensagem.class)
-	public ResponseEntity<StantardError> excecao(Mensagem e, HttpServletRequest request) {
-	 
-      StantardError err = new StantardError(HttpStatus.NO_CONTENT.value(),e.getMessage(), System.currentTimeMillis());
-	  return ResponseEntity.status(HttpStatus.NO_CONTENT).body(err);
+      StantardError err = new StantardError(HttpStatus.BAD_REQUEST.value(),e.getMessage(), System.currentTimeMillis()); 
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
    }
 }

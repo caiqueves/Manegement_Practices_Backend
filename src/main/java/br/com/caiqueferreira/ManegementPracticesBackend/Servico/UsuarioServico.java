@@ -37,23 +37,14 @@ public class UsuarioServico {
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
-	public Usuario find(Integer id) {
-
-		ValidarPerfil(id);
-
-		Optional<Usuario> obj = usuarioRepositorio.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
-	}
-
 	@Transactional
 	public Usuario insert(Usuario obj) {
 
-		if (usuarioRepositorio.findByCpfOuCnpj(obj.getCpfOuCnpj()) != null)
-			throw new Excecao("Já existe um cadastro para o CPF: " + obj.getCpfOuCnpj() + " informado");
+		if (findByCpfOuCnpj(obj.getCpfOuCnpj()) != null)
+			throw new Excecao("Já existe um cadastro para o CPF: " + obj.getCpfOuCnpj() + " informado.");
 
-		if (usuarioRepositorio.findByEmail(obj.getEmail()) != null)
-			throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado");
+		if (findByEmail(obj.getEmail()) != null)
+			throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
 
 		obj.setId(null);
 		obj = usuarioRepositorio.save(obj);
@@ -62,13 +53,16 @@ public class UsuarioServico {
 
 	public Usuario update(Usuario obj) {
 
-		ValidarPerfil(obj.getId());
-
-		if (usuarioRepositorio.findByEmail(obj.getEmail()) != null) {
-			throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !obj.getId().equals(user.getId())) {
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
 		}
 
 		try {
+			Usuario usu = findByEmail(obj.getEmail());
+			if (usu != null && !obj.getId().equals(usu.getId()))
+				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
+
 			Usuario newObj = find(obj.getId());
 			updateData(newObj, obj);
 			usuarioRepositorio.save(newObj);
@@ -76,18 +70,15 @@ public class UsuarioServico {
 
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não foi possivel alterar o USUARIO. Tipo: " + e.getMessage());
-		} finally {
-			try {
-
-			} catch (Mensagem e) {
-				throw new Mensagem("Usuário alterado com Sucesso !");
-			}
-		}
+		} 
 	}
 
 	public void delete(Integer id) {
 
-		ValidarPerfil(id);
+		UserSS user = UserService.authenticated();
+		if (user == null || user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
+		}
 
 		find(id);
 		try {
@@ -95,16 +86,6 @@ public class UsuarioServico {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não foi possível excluir o USUARIO. Tipo:  " + e.getMessage());
 		}
-	}
-
-	public List<Usuario> findAll() {
-
-		UserSS user = UserService.authenticated();
-		if (user == null || user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
-		}
-
-		return usuarioRepositorio.findAll();
 	}
 
 	public Usuario fromDTO(UsuarioNovoDTO objDto) {
@@ -128,8 +109,8 @@ public class UsuarioServico {
 	}
 
 	public Usuario fromDTO(UsuarioDTO objDto) {
-		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), null, null, Funcao.toEnum(objDto.getTipoFuncao()),
-				pe.encode(objDto.getSenha()));
+		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(), null,
+				Funcao.toEnum(objDto.getTipoFuncao()), pe.encode(objDto.getSenha()));
 
 		if (objDto.getListaTipoMetodologia() == null) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
@@ -155,11 +136,45 @@ public class UsuarioServico {
 		newObj.setListaTipoMetodologia(obj.getListaTipoMetodologia());
 	}
 
-	public AuthorizationException ValidarPerfil(Integer id) {
+	public Usuario find(Integer id) {
+
 		UserSS user = UserService.authenticated();
 		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
-			throw new AuthorizationException("O seu PERFIL, não permite consultar, alterar e Deleta outros USUARIOS.");
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
 		}
-		return null;
+
+		Optional<Usuario> obj = usuarioRepositorio.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
+	}
+
+	public List<Usuario> findAll() {
+
+		UserSS user = UserService.authenticated();
+		if (user == null || user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
+		}
+
+		return usuarioRepositorio.findAll();
+	}
+
+	public Usuario findByEmail(String email) {
+
+		Usuario usu = usuarioRepositorio.findByEmail(email);
+		if (usu == null) {
+			new ObjectNotFoundException("Email: " + email + "não encontrado , Tipo: " + Usuario.class.getName());
+		}
+
+		return usu;
+	}
+
+	public Usuario findByCpfOuCnpj(String CpfOuCnpj) {
+
+		Usuario usu = usuarioRepositorio.findByCpfOuCnpj(CpfOuCnpj);
+		if (usu == null) {
+			new ObjectNotFoundException(
+					"CpfOuCnpj : " + CpfOuCnpj + "não encontrado , Tipo: " + Usuario.class.getName());
+		}
+		return usu;
 	}
 }

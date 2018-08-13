@@ -29,21 +29,27 @@ public class TipoMetodologiaServico {
 	public TipoMetodologia insert(TipoMetodologia obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("Acesso negado");
+		if (user == null || user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
 		}
-
+		
 		find(obj.getId());
 		obj.setId(null);
 		obj = repositorio.save(obj);
 		return obj;
 	}
 
+	public TipoMetodologia find(Integer id) {
+		Optional<TipoMetodologia> obj = repositorio.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + TipoMetodologia.class.getName()));
+	}
+	
 	public TipoMetodologia update(TipoMetodologia obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("Acesso negado");
+		if (user == null || user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
 		}
 
 		if (repositorio.findByDescricao(obj.getDescricao()) != null) {
@@ -59,8 +65,8 @@ public class TipoMetodologiaServico {
 	public void delete(Integer id) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("Acesso negado");
+		if (user == null || user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
 		}
 
 		find(id);
@@ -71,17 +77,13 @@ public class TipoMetodologiaServico {
 		}
 	}
 
-	public TipoMetodologia find(Integer id) {
-		Optional<TipoMetodologia> obj = repositorio.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + TipoMetodologia.class.getName()));
-	}
+
 
 	public List<TipoMetodologia> findAll() {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("Acesso negado");
+		if (user == null || user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
 		}
 
 		return repositorio.findAll();
