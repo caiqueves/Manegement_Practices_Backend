@@ -50,8 +50,9 @@ public class UsuarioServico {
 
 		obj.setId(null);
 		obj = usuarioRepositorio.save(obj);
+		
 		//Serviço de enviar o e-mail, desativado
-		//emailService.sendOrderConfirmationEmail(obj);
+		emailService.sendOrderConfirmationHtmlEmail(obj);
 		return obj;
 	}
 

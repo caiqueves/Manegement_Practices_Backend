@@ -12,10 +12,6 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.SmtpEmailService
 @Profile("desen")
 public class DesenvolvimentoConfiguracao {
 
-	/*
-	 * @Bean public boolean instantiateDatabase() throws ParseException {
-	 * dbService.instantiateTestDatabase(); return true; }
-	 */
 	@Bean
 	public EmailService emailService() {
 		return  new SmtpEmailService();
