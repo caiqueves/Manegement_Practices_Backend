@@ -23,7 +23,6 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Authoriz
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNotFoundException;
-import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Mensagens.Mensagem;
 
 @Service
 public class UsuarioServico {
@@ -37,6 +36,9 @@ public class UsuarioServico {
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
+	@Autowired
+	private EmailService emailService;
+	
 	@Transactional
 	public Usuario insert(Usuario obj) {
 
@@ -48,6 +50,8 @@ public class UsuarioServico {
 
 		obj.setId(null);
 		obj = usuarioRepositorio.save(obj);
+		//Serviço de enviar o e-mail, desativado
+		//emailService.sendOrderConfirmationEmail(obj);
 		return obj;
 	}
 

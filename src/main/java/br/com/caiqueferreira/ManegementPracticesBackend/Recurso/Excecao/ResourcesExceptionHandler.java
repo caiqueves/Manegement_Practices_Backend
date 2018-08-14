@@ -13,7 +13,6 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Authoriz
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNotFoundException;
-import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Mensagens.Mensagem;
 
 
 @ControllerAdvice

@@ -16,6 +16,7 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepos
 
 @Service
 public class DBService {
+	
 	@Autowired
 	private BCryptPasswordEncoder pe;
 	@Autowired
@@ -29,7 +30,7 @@ public class DBService {
 	public void instantiateTestDatabase() throws ParseException {
 
 		TipoMetodologia tipomet1 = new TipoMetodologia(null,"Metodologias Tradicionais");
-		TipoMetodologia tipomet2 = new TipoMetodologia(null,"Metodologias Ageis");
+	    TipoMetodologia tipomet2 = new TipoMetodologia(null,"Metodologias Ageis");
 		TipoMetodologia tipomet3 = new TipoMetodologia(null,"Metodologias 3.0");
 		
 		tipoMetodologiaRepositorio.saveAll(Arrays.asList(tipomet1,tipomet2,tipomet3));
@@ -38,5 +39,7 @@ public class DBService {
 				Funcao.GERENTE, pe.encode("12345"));
 		lg1.addPerfil(Perfil.ADMIN);
 		usuarioRepositorio.save(lg1);
+		
+		
 	}
 }

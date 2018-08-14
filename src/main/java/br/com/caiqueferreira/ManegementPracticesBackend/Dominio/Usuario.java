@@ -161,4 +161,18 @@ public class Usuario implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		//builder.append("Nome   : "+getNome());
+		//builder.append("\n");
+		builder.append("Email  : "+getEmail());
+		builder.append("\n");
+		//builder.append("Função : "+getTipoFuncao());
+		//builder.append("\n");
+		builder.append("Senha  : "+getSenha());
+		builder.append("\n");
+		return builder.toString();
+	}
 }

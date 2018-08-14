@@ -6,13 +6,8 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioNovoDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.Recurso.Excecao.FieldMessage;
-import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
-import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.Utils.BR;
 
 public class UsuarioInserirValidacao implements ConstraintValidator<UsuarioInserir,UsuarioNovoDTO >{
