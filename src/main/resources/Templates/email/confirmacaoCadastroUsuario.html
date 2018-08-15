@@ -6,23 +6,25 @@
 </head>
 <body>
 	<div>
-	<p> <i>Olá, </i> <b><span th:text="${Usuario.nome}" ></span></b> <i> bem vindo ! </i>
- 	<br>
-		<i>Segue os seus dados de acesso.</i>
-	<br> 
-		Email: <b><span th:text="${Usuario.email}"></span></b>
-		Senha: <b><span th:text="${Usuario.senha}"></span></b>
-	<br>
-	<br>
-	<p>
-		<i>Agradeçemos a sua confiança. Esperamos contribuir de 
-		   maneira construtiva o seu dia apartir de hoje.
-		</i>
-	</p>	
-	<h1>
-	Att,
-	<br>
-	Manegement Practices</h1>	
+		<p>
+			<i>Olá, </i> <b><span th:text="${Usuario.nome}"></span></b> <i> bem vindo ! </i> 
+			<br> 
+			<br>
+			<i>Segue os seus dados de acesso.</i> 
+			<br>
+			Email: <b><span th:text="${Usuario.email}"></span></b> 
+			Senha: <b><span th:text="${Usuario.senha}"></span></b> 
+			<br> 
+			<br>
+		<p>
+			<i>Agradeçemos a sua confiança. Esperamos contribuir de maneira
+		    	construtiva o seu dia apartir de hoje. </i>
+		</p>
+		<b> 
+		Att, 
+		<br> 
+		Manegement Practices
+		</b>
 	</div>
 </body>
 </html>

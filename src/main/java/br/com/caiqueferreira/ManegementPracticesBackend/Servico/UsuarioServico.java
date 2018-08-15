@@ -36,9 +36,11 @@ public class UsuarioServico {
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
+	
+
 	@Autowired
 	private EmailService emailService;
-	
+
 	@Transactional
 	public Usuario insert(Usuario obj) {
 
@@ -47,12 +49,20 @@ public class UsuarioServico {
 
 		if (findByEmail(obj.getEmail()) != null)
 			throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
-
-		obj.setId(null);
-		obj = usuarioRepositorio.save(obj);
 		
-		//Serviço de enviar o e-mail, desativado
-		emailService.sendOrderConfirmationHtmlEmail(obj);
+		    List<String> lstDadosEmail = new ArrayList<>();
+		
+		    lstDadosEmail.add(" Confirmação de Cadastro");
+		    lstDadosEmail.add(obj.getNome());
+		    lstDadosEmail.add("Email : " + obj.getEmail());
+		    lstDadosEmail.add("Senha : " + obj.getSenha());
+		
+		obj.setId(null);
+		obj.setSenha(pe.encode(obj.getSenha()));
+		obj = usuarioRepositorio.save(obj);
+
+		emailService.sendOrderConfirmationEmail(lstDadosEmail);
+		lstDadosEmail = null;
 		return obj;
 	}
 
@@ -68,14 +78,23 @@ public class UsuarioServico {
 			if (usu != null && !obj.getId().equals(usu.getId()))
 				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
 
+			    List<String> lstDadosEmail = new ArrayList<>();
+			
+			    lstDadosEmail.add(" Alteração de Cadastro");
+			    lstDadosEmail.add(obj.getNome());
+			    lstDadosEmail.add("Senha : " + obj.getEmail());
+			    lstDadosEmail.add("Email : " + obj.getSenha());
+			
 			Usuario newObj = find(obj.getId());
 			updateData(newObj, obj);
 			usuarioRepositorio.save(newObj);
+
+			emailService.sendOrderConfirmationEmail(lstDadosEmail);
 			return newObj;
 
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não foi possivel alterar o USUARIO. Tipo: " + e.getMessage());
-		} 
+		}
 	}
 
 	public void delete(Integer id) {
@@ -96,7 +115,7 @@ public class UsuarioServico {
 	public Usuario fromDTO(UsuarioNovoDTO objDto) {
 
 		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(),
-				Funcao.toEnum(objDto.getTipoFuncao()), pe.encode(objDto.getSenha()));
+				Funcao.toEnum(objDto.getTipoFuncao()), objDto.getSenha());
 
 		if (objDto.getListaTipoMetodologia() == null) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
@@ -115,7 +134,7 @@ public class UsuarioServico {
 
 	public Usuario fromDTO(UsuarioDTO objDto) {
 		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(), null,
-				Funcao.toEnum(objDto.getTipoFuncao()), pe.encode(objDto.getSenha()));
+				Funcao.toEnum(objDto.getTipoFuncao()), objDto.getSenha());
 
 		if (objDto.getListaTipoMetodologia() == null) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
@@ -137,7 +156,7 @@ public class UsuarioServico {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 		newObj.setTipoFuncao(obj.getTipoFuncao());
-		newObj.setSenha(obj.getSenha());
+		newObj.setSenha(pe.encode(obj.getSenha()));
 		newObj.setListaTipoMetodologia(obj.getListaTipoMetodologia());
 	}
 

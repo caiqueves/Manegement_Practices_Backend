@@ -5,14 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.EmailService;
-import br.com.caiqueferreira.ManegementPracticesBackend.Servico.SmtpEmailService;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.MockEmailService;
 
 @Configuration
-@Profile("desen")
-public class DesenvolvimentoConfiguracao {
+@Profile("desenH2")
+public class TesteConfiguracao {
 
 	@Bean
 	public EmailService emailService() {
-		return  new SmtpEmailService();
+		return  new MockEmailService();
 	}
 }

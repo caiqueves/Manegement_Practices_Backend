@@ -1,12 +1,9 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Dominio;
 
 import java.io.Serializable;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,6 +46,7 @@ public class Usuario implements Serializable {
 
 	@JsonIgnore
 	private String senha;
+	
 	
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIL_USUARIO")
@@ -168,10 +166,9 @@ public class Usuario implements Serializable {
 	@Override
 	public String toString() {	
 		StringBuilder builder = new StringBuilder();
-		builder.append("Nome    : "+ getNome());
+		builder.append("\n");
 		builder.append("Email   : "+ getEmail());
-		builder.append("CPF/CPNJ: "+ getCpfOuCnpj());
-		builder.append("Função  : "+ getTipoFuncao());
+		builder.append("\n");
 		builder.append("Senha   : "+ getSenha());	
 		return builder.toString();
 	}
