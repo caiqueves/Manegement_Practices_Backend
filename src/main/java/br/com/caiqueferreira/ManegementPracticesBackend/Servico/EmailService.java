@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.springframework.mail.SimpleMailMessage;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
-
 public interface EmailService {
 	
-	//void sendOrderConfirmationEmail(Usuario obj, String senha,String TituloEmail);
-	
 	void sendOrderConfirmationEmail(List<String> lstDadosEmail);
+	
+	/*void sendOrderConfirmationEmail1(Usuario obj);*/
 	
 	void sendEmail(SimpleMailMessage msg);
 	

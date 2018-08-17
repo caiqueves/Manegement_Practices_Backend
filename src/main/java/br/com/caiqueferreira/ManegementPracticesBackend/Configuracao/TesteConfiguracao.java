@@ -13,6 +13,7 @@ public class TesteConfiguracao {
 
 	@Bean
 	public EmailService emailService() {
-		return  new MockEmailService();
+		return new MockEmailService();
 	}
+
 }

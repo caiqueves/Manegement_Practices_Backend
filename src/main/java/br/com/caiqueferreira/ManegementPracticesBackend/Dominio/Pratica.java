@@ -12,7 +12,6 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 @Entity
 @Table(name = "Pratica")
 public class Pratica implements Serializable {
@@ -23,22 +22,21 @@ public class Pratica implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String descricao;
-	
+
 	@JsonIgnore
 	@OneToOne
-	@JoinColumn(name="tipoMetodologia_id")
+	@JoinColumn(name = "tipoMetodologia_id")
 	private TipoMetodologia tipoMetodologia;
-    
-	
+
 	public Pratica() {
 
 	}
 
-	public Pratica(Integer id, String descricao,TipoMetodologia tipo) {
+	public Pratica(Integer id, String descricao, TipoMetodologia tipoMetodologia) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
-		this.setTipoMetodologia(tipo);	
+		this.tipoMetodologia = tipoMetodologia;
 	}
 
 	public Integer getId() {
@@ -65,6 +63,4 @@ public class Pratica implements Serializable {
 		this.tipoMetodologia = tipoMetodologia;
 	}
 
-	
-	
 }

@@ -13,7 +13,6 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.Usuar
 @UsuarioInserir
 public class UsuarioNovoDTO implements Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -25,20 +24,17 @@ public class UsuarioNovoDTO implements Serializable {
 	@NotEmpty(message = "Preenchimento obrigatório !")
 	@Email(message = "Email inválido")
 	private String email;
-	
+
 	@NotEmpty(message = "Por favor, informe o Cpf Ou Cnpj. Preenchimento obrigatório !")
 	private String cpfOuCnpj;
-	
-	
+
 	private Integer tipoFuncao;
-		
-	@NotEmpty(message="Por favor, informe a senha. Preenchimento obrigatório !")
+
+	@NotEmpty(message = "Por favor, informe a senha. Preenchimento obrigatório !")
 	private String senha;
 
-	
-	private List<Integer> listaTipoMetodologia; 
-	
-	
+	private List<Integer> listaTipoMetodologia;
+
 	public Integer getId() {
 		return id;
 	}

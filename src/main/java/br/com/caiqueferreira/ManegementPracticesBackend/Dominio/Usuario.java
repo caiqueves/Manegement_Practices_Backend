@@ -46,13 +46,11 @@ public class Usuario implements Serializable {
 
 	@JsonIgnore
 	private String senha;
-	
-	
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PERFIL_USUARIO")
 	private Set<Integer> Perfil_ID = new HashSet<>();
 
-	
 	@ManyToMany
 	@JoinTable(name = "Usuario_TipoMetodologia", joinColumns = {
 			@JoinColumn(name = "id_usuario") }, inverseJoinColumns = { @JoinColumn(name = "id_tipoMetodologia") })
@@ -62,14 +60,13 @@ public class Usuario implements Serializable {
 		addPerfil(Perfil.USUARIO);
 	}
 
-	public Usuario(Integer id, String nome, String email, String cpfOuCnpj, Funcao tipoFuncao, String senha) 
-	{
+	public Usuario(Integer id, String nome, String email, String cpfOuCnpj, Funcao tipoFuncao, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipoFuncao = (tipoFuncao==null) ? null : tipoFuncao.getCod();
+		this.tipoFuncao = (tipoFuncao == null) ? null : tipoFuncao.getCod();
 		this.senha = senha;
 		addPerfil(Perfil.USUARIO);
 	}
@@ -121,7 +118,7 @@ public class Usuario implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-    
+
 	public List<TipoMetodologia> getListaTipoMetodologia() {
 		return listaTipoMetodologia;
 	}
@@ -164,12 +161,12 @@ public class Usuario implements Serializable {
 	}
 
 	@Override
-	public String toString() {	
+	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("\n");
-		builder.append("Email   : "+ getEmail());
+		builder.append("Email   : " + getEmail());
 		builder.append("\n");
-		builder.append("Senha   : "+ getSenha());	
+		builder.append("Senha   : " + getSenha());
 		return builder.toString();
 	}
 }

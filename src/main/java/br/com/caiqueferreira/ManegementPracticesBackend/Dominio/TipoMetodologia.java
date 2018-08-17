@@ -27,15 +27,14 @@ public class TipoMetodologia implements Serializable {
 	private Integer id;
 	@Column(unique = true)
 	private String descricao;
-	
+
 	@JsonIgnore
-	@ManyToMany(mappedBy="listaTipoMetodologia")
-    private List<Usuario> usuarios = new ArrayList<>();
-	
-	@JsonIgnore
-	@OneToMany(mappedBy="tipoMetodologia", cascade=CascadeType.ALL)
+	@ManyToMany(mappedBy = "listaTipoMetodologia")
+	private List<Usuario> usuarios = new ArrayList<>();
+
+	@OneToMany(mappedBy = "tipoMetodologia", cascade = CascadeType.ALL)
 	private List<Pratica> praticas = new ArrayList<>();
-    
+
 	public TipoMetodologia() {
 
 	}
@@ -43,7 +42,7 @@ public class TipoMetodologia implements Serializable {
 	public TipoMetodologia(Integer id, String descricao) {
 		super();
 		this.id = id;
-		this.descricao = descricao;	
+		this.descricao = descricao;
 	}
 
 	public Integer getId() {

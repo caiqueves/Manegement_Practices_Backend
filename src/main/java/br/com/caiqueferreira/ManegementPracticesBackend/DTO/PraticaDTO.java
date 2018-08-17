@@ -4,23 +4,23 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Pratica;
 
-public class TipoMetodologiaDTO {
+public class PraticaDTO {
 
-	
 	private Integer id;
 	
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Length(min = 5, max = 100, message = "O tamanho deve ser entre 5 e 100 caracteres")
 	private String descricao;
+	
+	Integer tipoMetodologia;
 
-	
-	
-	public TipoMetodologiaDTO() {	
+	public PraticaDTO() {
+		
 	}
-
-	public TipoMetodologiaDTO(TipoMetodologia obj) {
+	
+	public PraticaDTO(Pratica obj) {
 		super();
 		this.id = obj.getId();
 		this.descricao = obj.getDescricao();
@@ -40,5 +40,15 @@ public class TipoMetodologiaDTO {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}	
+	}
+
+	public Integer getTipoMetodologia() {
+		return tipoMetodologia;
+	}
+
+	public void setTipoMetodologia(Integer tipoMetodologia) {
+		this.tipoMetodologia = tipoMetodologia;
+	}
+	
+	
 }

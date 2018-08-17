@@ -29,14 +29,17 @@ public class TipoMetodologiaServico {
 	public TipoMetodologia insert(TipoMetodologia obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
-		
-		find(obj.getId());
-		obj.setId(null);
-		obj = repositorio.save(obj);
-		return obj;
+		try {
+			obj.setId(null);
+			obj = repositorio.save(obj);
+			return obj;
+
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não foi possível inserir o tipo de metodologia. Tipo: " + e.getMessage());
+		}
 	}
 
 	public TipoMetodologia find(Integer id) {
@@ -44,49 +47,57 @@ public class TipoMetodologiaServico {
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + TipoMetodologia.class.getName()));
 	}
-	
+
+	public List<TipoMetodologia> findAll() {
+
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
+		}
+
+		List<TipoMetodologia> metolist = repositorio.findAll();
+
+		if (metolist.isEmpty()) {
+			throw new ObjectNotFoundException("Não existem dados. Tipo: " + TipoMetodologia.class.getName());
+		}
+
+		return metolist;
+	}
+
 	public TipoMetodologia update(TipoMetodologia obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
 		if (repositorio.findByDescricao(obj.getDescricao()) != null) {
-			throw new Excecao("Já existe um cadastro para a Descrição: " + obj.getDescricao() + " informado.");
+			throw new Excecao("Já existe um cadastro para a descrição: " + obj.getDescricao() + " informado.");
 		}
+		try {
+			TipoMetodologia newObj = find(obj.getId());
+			updateData(newObj, obj);
+			repositorio.save(newObj);
+			return newObj;
 
-		TipoMetodologia newObj = find(obj.getId());
-		updateData(newObj, obj);
-		repositorio.save(newObj);
-		return newObj;
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não foi possível alterar o tipo de metodologia. Tipo: " + e.getMessage());
+		}
 	}
 
 	public void delete(Integer id) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
 		find(id);
 		try {
 			repositorio.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excluir o tipo de metodologia.");
+			throw new DataIntegrityException("Não foi possível excluir o tipo de metodologia. Tipo: " + e.getMessage());
 		}
-	}
-
-
-
-	public List<TipoMetodologia> findAll() {
-
-		UserSS user = UserService.authenticated();
-		if (user == null || user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("O seu perfil não tem acesso ao serviço.");
-		}
-
-		return repositorio.findAll();
 	}
 
 	public TipoMetodologia fromDTO(TipoMetodologiaDTO objDto) {

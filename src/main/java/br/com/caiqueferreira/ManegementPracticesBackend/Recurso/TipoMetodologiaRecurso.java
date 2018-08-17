@@ -1,6 +1,7 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Recurso;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -27,6 +28,13 @@ public class TipoMetodologiaRecurso {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<TipoMetodologia> find(@PathVariable Integer id) {
 		TipoMetodologia obj = servico.find(id);
+		return ResponseEntity.ok().body(obj);
+	}
+
+	//@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<TipoMetodologia>> findAll() {
+		List<TipoMetodologia> obj = servico.findAll();
 		return ResponseEntity.ok().body(obj);
 	}
 
