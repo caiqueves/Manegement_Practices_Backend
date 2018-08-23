@@ -26,19 +26,6 @@ public class UsuarioRecurso {
 	@Autowired
 	private UsuarioServico servico;	
 
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<Usuario> find(@PathVariable Integer id) {
-		Usuario obj = servico.find(id);
-		return ResponseEntity.ok().body(obj);
-	}
-	
-	//@PreAuthorize("hasAnyRole('ADMIN')")
-	@RequestMapping( method=RequestMethod.GET)
-	public ResponseEntity<List<Usuario>> find() {
-		List<Usuario> obj = servico.findAll();
-		return ResponseEntity.ok().body(obj);
-	}
-	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioNovoDTO objDto) {
 		Usuario obj = servico.fromDTO(objDto);
@@ -48,7 +35,19 @@ public class UsuarioRecurso {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	//@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Usuario> find(@PathVariable Integer id) {
+		Usuario obj = servico.find(id);
+		return ResponseEntity.ok().body(obj);
+	}
+	
+	@RequestMapping( method=RequestMethod.GET)
+	public ResponseEntity<List<Usuario>> find() {
+		List<Usuario> obj = servico.findAll();
+		return ResponseEntity.ok().body(obj);
+	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
 		Usuario obj = servico.fromDTO(objDto);
 		obj.setId(id);
@@ -56,7 +55,7 @@ public class UsuarioRecurso {
 		return ResponseEntity.noContent().build();
 	}
 	
-	//@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		servico.delete(id);
 		return ResponseEntity.noContent().build();

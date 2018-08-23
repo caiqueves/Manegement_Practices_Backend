@@ -38,7 +38,7 @@ public class UsuarioServico {
 	private BCryptPasswordEncoder pe;
 
 	@Autowired
-	private EmailService emailService;
+	private EmailServico emailService;
 
 	@Transactional
 	public Usuario insert(Usuario obj) {

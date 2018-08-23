@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.mail.SimpleMailMessage;
 
-public interface EmailService {
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
+
+public interface EmailServico {
 	
 	void sendOrderConfirmationEmail(List<String> lstDadosEmail);
 	
@@ -15,4 +17,6 @@ public interface EmailService {
 	/*void sendOrderConfirmationHtmlEmail(Usuario obj);
 	
 	void sendHtmlEmail(MimeMessage msg);*/
+	
+	void sendNewPasswordEmail(Usuario usu, String novaSenha);
 }

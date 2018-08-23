@@ -23,7 +23,7 @@ public class Pratica implements Serializable {
 	private Integer id;
 	private String descricao;
 
-	@JsonIgnore
+	
 	@OneToOne
 	@JoinColumn(name = "tipoMetodologia_id")
 	private TipoMetodologia tipoMetodologia;

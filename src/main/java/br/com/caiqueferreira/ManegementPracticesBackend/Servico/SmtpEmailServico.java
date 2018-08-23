@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
-public class SmtpEmailService extends AbstractEmailService {
+public class SmtpEmailServico extends AbstractEmailServico {
 
 	@Autowired
 	private MailSender mailSender;
@@ -14,7 +14,7 @@ public class SmtpEmailService extends AbstractEmailService {
 	/*@Autowired
 	private JavaMailSender javaMailSender;*/
 	
-	private static final Logger LOG = LoggerFactory.getLogger(SmtpEmailService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SmtpEmailServico.class);
 	
 	@Override
 	public void sendEmail(SimpleMailMessage msg) {

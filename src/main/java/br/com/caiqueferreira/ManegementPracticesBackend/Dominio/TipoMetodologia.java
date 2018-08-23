@@ -32,6 +32,7 @@ public class TipoMetodologia implements Serializable {
 	@ManyToMany(mappedBy = "listaTipoMetodologia")
 	private List<Usuario> usuarios = new ArrayList<>();
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "tipoMetodologia", cascade = CascadeType.ALL)
 	private List<Pratica> praticas = new ArrayList<>();
 

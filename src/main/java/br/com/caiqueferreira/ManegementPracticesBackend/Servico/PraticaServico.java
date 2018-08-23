@@ -2,6 +2,7 @@ package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -29,6 +30,8 @@ public class PraticaServico {
 	@Autowired
 	private TipoMetodologiaServico tipoMetodologiaServico;
 
+	private Random rand = new Random();
+	
 	@Transactional
 	public Pratica insert(Pratica obj) {
 
@@ -68,6 +71,18 @@ public class PraticaServico {
 		return pralist;
 	}
 
+	public Pratica findAleatoria()
+	{  
+		Pratica pra = find((int)BetweenRange(1,repositorio.findAleatoria()));
+		return pra;
+		
+	}
+	
+	public static double BetweenRange(double min, double max){
+	    double x = (Math.random()*((max-min)+1))+min;
+	    return x;
+	}
+	
 	public Pratica update(Pratica obj) {
 
 		UserSS user = UserService.authenticated();

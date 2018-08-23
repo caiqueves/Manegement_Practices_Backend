@@ -7,7 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 
-public abstract class AbstractEmailService implements EmailService {
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
+
+public abstract class AbstractEmailServico implements EmailServico {
 	
 	@Value("${default.sender}")
 	private String sender;
@@ -34,8 +36,6 @@ public abstract class AbstractEmailService implements EmailService {
 		sm.setText("Email:" + lstDadosEmail.get(2) + "\n" + lstDadosEmail.get(3));
 		return sm;
 	}
-	
-	
 	
 	/*@Override
 	public void sendOrderConfirmationEmail1(Usuario obj) {
@@ -80,4 +80,21 @@ public abstract class AbstractEmailService implements EmailService {
 		
 		return mimeMessage;
 	}*/
+	
+	public void sendNewPasswordEmail(Usuario obj, String novaSenha) {
+		
+		SimpleMailMessage sm = prepareNewPasswordEmail(obj, novaSenha);
+		sendEmail(sm);
+	}
+
+	private SimpleMailMessage prepareNewPasswordEmail(Usuario obj, String novaSenha) {
+		
+		SimpleMailMessage sm = new SimpleMailMessage();
+		sm.setTo(obj.getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("[Manegement Practices] Solicitação de Nova Senha");
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText("NovaSenha: " + novaSenha);
+		return sm;
+	}
 }
