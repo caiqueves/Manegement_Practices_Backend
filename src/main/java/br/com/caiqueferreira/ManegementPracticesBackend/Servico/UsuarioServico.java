@@ -56,6 +56,7 @@ public class UsuarioServico {
 			lstDadosEmail.add(obj.getNome());
 			lstDadosEmail.add(obj.getEmail());
 			lstDadosEmail.add("Senha : " + obj.getSenha());
+			lstDadosEmail.add("Seja Bem Vindo(a)s ao Manegement Practices.\n Segue abaixo os seus dados de acesso. \n");
 
 			obj.setId(null);
 			obj.setSenha(pe.encode(obj.getSenha()));
@@ -133,6 +134,7 @@ public class UsuarioServico {
 			lstDadosEmail.add(obj.getNome());
 			lstDadosEmail.add(obj.getEmail());
 			lstDadosEmail.add("Senha : " + obj.getSenha());
+			lstDadosEmail.add("Segue abaixo os seus dados de acesso. \n");
 
 			Usuario newObj = find(obj.getId());
 			updateData(newObj, obj);

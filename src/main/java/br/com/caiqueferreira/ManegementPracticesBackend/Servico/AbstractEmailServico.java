@@ -3,9 +3,11 @@ package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 
@@ -13,12 +15,6 @@ public abstract class AbstractEmailServico implements EmailServico {
 	
 	@Value("${default.sender}")
 	private String sender;
-	
-	/*@Autowired
-	private TemplateEngine templateEngine;
-	
-	@Autowired
-	private JavaMailSender javaMailSender;*/
 	
 	@Override
 	public void sendOrderConfirmationEmail(List<String>lstDadosEmail) {
@@ -33,53 +29,10 @@ public abstract class AbstractEmailServico implements EmailServico {
 		sm.setFrom(sender);
 		sm.setSubject("[Manegement Practices] " + lstDadosEmail.get(0));
 		sm.setSentDate(new Date(System.currentTimeMillis()));
-		sm.setText("Email:" + lstDadosEmail.get(2) + "\n" + lstDadosEmail.get(3));
+		sm.setText("Olá,"  + lstDadosEmail.get(1).toUpperCase()  + "!\n\n" + lstDadosEmail.get(4) + "\n Email:" + lstDadosEmail.get(2) + "\n" + lstDadosEmail.get(3)
+		          +"\n\n Att \n Manegement Practices");
 		return sm;
 	}
-	
-	/*@Override
-	public void sendOrderConfirmationEmail1(Usuario obj) {
-	    
-		SimpleMailMessage sm = prepareSimpleMailMessageFromPedido1(obj);
-		sendEmail(sm);
-	}
-	
-	protected SimpleMailMessage prepareSimpleMailMessageFromPedido1(Usuario obj) {
-		SimpleMailMessage sm = new SimpleMailMessage();
-		sm.setTo(obj.getEmail());
-		sm.setFrom(sender);
-		sm.setSubject("Pedido confirmado! Código: " + obj.getId());
-		sm.setSentDate(new Date(System.currentTimeMillis()));
-		sm.setText(obj.toString());
-		return sm;
-	}
-	
-	protected String htmlFromTemplateUsuario(Usuario obj) {
-		Context context = new Context();
-		context.setVariable("Usuario", obj);
-		return templateEngine.process("email/confirmacaoCadastroUsuario", context);
-	}
-	
-	@Override
-	public void sendOrderConfirmationHtmlEmail(Usuario obj) {
-		try {
-		MimeMessage mm = prepareMimeMessageFromUsuario(obj);
-		sendHtmlEmail(mm);
-		}catch (MessagingException e) {
-			sendOrderConfirmationEmail1(obj);
-		}
-	}
-	protected MimeMessage prepareMimeMessageFromUsuario(Usuario obj) throws MessagingException {
-		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-		MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage, true);
-		mmh.setTo(obj.getEmail());
-		mmh.setFrom(sender);
-		mmh.setSubject("[Manegement Practices] Confirmação de Cadastro");
-		mmh.setSentDate(new Date(System.currentTimeMillis()));
-		mmh.setText(htmlFromTemplateUsuario(obj),true);
-		
-		return mimeMessage;
-	}*/
 	
 	public void sendNewPasswordEmail(Usuario obj, String novaSenha) {
 		
@@ -94,7 +47,11 @@ public abstract class AbstractEmailServico implements EmailServico {
 		sm.setFrom(sender);
 		sm.setSubject("[Manegement Practices] Solicitação de Nova Senha");
 		sm.setSentDate(new Date(System.currentTimeMillis()));
-		sm.setText("NovaSenha: " + novaSenha);
+		sm.setText("Olá,"  + obj.getNome().toUpperCase()  + "!\n\n Segue sua nova senha: " +  novaSenha.toUpperCase()
+        +"\n\n Att \n Manegement Practices");
 		return sm;
 	}
+	
+	
+	
 }
