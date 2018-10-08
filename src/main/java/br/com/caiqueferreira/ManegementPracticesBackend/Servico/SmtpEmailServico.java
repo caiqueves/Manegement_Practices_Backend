@@ -8,9 +8,11 @@ import org.springframework.mail.SimpleMailMessage;
 
 public class SmtpEmailServico extends AbstractEmailServico {
 
-	
 	@Autowired
 	private MailSender mailSender;
+	
+	/*@Autowired
+	private JavaMailSender javaMailSender;*/
 	
 	private static final Logger LOG = LoggerFactory.getLogger(SmtpEmailServico.class);
 	
@@ -20,4 +22,11 @@ public class SmtpEmailServico extends AbstractEmailServico {
 		mailSender.send(msg);
 		LOG.info("Email enviado");
 	}
+
+	/*@Override
+	public void sendHtmlEmail(MimeMessage msg) {
+			LOG.info("Enviando email...");
+			javaMailSender.send(msg);
+			LOG.info("Email enviado");
+		}*/
 }
