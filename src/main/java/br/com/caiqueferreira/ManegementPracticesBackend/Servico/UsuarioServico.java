@@ -18,12 +18,14 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Funcao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
+import br.com.caiqueferreira.ManegementPracticesBackend.Recurso.Excecao.FieldMessage;
 import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
 import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthorizationException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNotFoundException;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.Utils.BR;
 
 @Service
 public class UsuarioServico {
@@ -44,6 +46,14 @@ public class UsuarioServico {
 	public Usuario insert(Usuario obj) {
 
 		try {
+			
+			if ((obj.getCpfOuCnpj().length() == 11) && !BR.isValidCPF(obj.getCpfOuCnpj())) {
+				throw new Excecao("CPF inválido");
+			}
+	 		if ((obj.getCpfOuCnpj().length() == 14) && !BR.isValidCNPJ(obj.getCpfOuCnpj())) {
+	 			throw new Excecao("CNPJ inválido");
+			}
+				
 			if (findByCpfOuCnpj(obj.getCpfOuCnpj()) != null)
 				throw new Excecao("Já existe um cadastro para o CPF:   " + obj.getCpfOuCnpj() + " informado.");
 
@@ -56,6 +66,7 @@ public class UsuarioServico {
 			lstDadosEmail.add(obj.getNome());
 			lstDadosEmail.add(obj.getEmail());
 			lstDadosEmail.add("Senha : " + obj.getSenha());
+			lstDadosEmail.add("Seja Bem Vindo(a)s ao Manegement Practices.\n Segue abaixo os seus dados de acesso. \n");
 
 			obj.setId(null);
 			obj.setSenha(pe.encode(obj.getSenha()));
@@ -133,6 +144,7 @@ public class UsuarioServico {
 			lstDadosEmail.add(obj.getNome());
 			lstDadosEmail.add(obj.getEmail());
 			lstDadosEmail.add("Senha : " + obj.getSenha());
+			lstDadosEmail.add("Segue abaixo os seus dados de acesso. \n");
 
 			Usuario newObj = find(obj.getId());
 			updateData(newObj, obj);

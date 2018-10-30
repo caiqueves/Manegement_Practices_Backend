@@ -10,13 +10,9 @@ public interface EmailServico {
 	
 	void sendOrderConfirmationEmail(List<String> lstDadosEmail);
 	
-	/*void sendOrderConfirmationEmail1(Usuario obj);*/
-	
 	void sendEmail(SimpleMailMessage msg);
 	
-	/*void sendOrderConfirmationHtmlEmail(Usuario obj);
-	
-	void sendHtmlEmail(MimeMessage msg);*/
-	
 	void sendNewPasswordEmail(Usuario usu, String novaSenha);
+	
+	
 }

@@ -12,7 +12,7 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.SmtpEmailServico
 public class DesenvolvimentoConfiguracao {
 
 	@Bean
-	public EmailServico emailService() {
+	public EmailServico emailServico() {
 		return  new SmtpEmailServico();
 	}
 }

@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.UsuarioInserir;
 
-@UsuarioInserir
+
 public class UsuarioNovoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -26,6 +26,7 @@ public class UsuarioNovoDTO implements Serializable {
 	private String email;
 
 	@NotEmpty(message = "Por favor, informe o Cpf Ou Cnpj. Preenchimento obrigatório !")
+	@Length(min = 11, max = 14, message = "O tamanho deve ser entre 11 e 14 caracteres")
 	private String cpfOuCnpj;
 
 	private Integer tipoFuncao;
