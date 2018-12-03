@@ -1,5 +1,7 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
+
+
 import java.text.ParseException;
 import java.util.Arrays;
 
@@ -51,6 +53,8 @@ public class DBServico {
 		praticaRepositorio.saveAll(Arrays.asList(pra1,pra2,pra3,pra4,pra5,pra6,pra7));
 		
 		
+	
+				
 		Usuario lg1 = new Usuario(null, "caique ferreira","caique.sire2@gmail.com", "09157332428",
 				Funcao.GERENTE, pe.encode("12345"));
 		lg1.addPerfil(Perfil.ADMIN);

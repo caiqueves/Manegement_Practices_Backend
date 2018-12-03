@@ -36,9 +36,10 @@ public class AutenticacaoRecurso {
 		return ResponseEntity.noContent().build();
 	}
 
-	@RequestMapping(value = "/EsqueciSenha", method = RequestMethod.POST)
+	@RequestMapping(value = "/esqueciSenha", method = RequestMethod.POST)
 	public ResponseEntity<Void> EsqueciSenha(@Valid @RequestBody EmailDTO objDTO) {
 		autservico.sendNewPassword(objDTO.getEmail());
 		return ResponseEntity.noContent().build();
 	}
+	
 }

@@ -18,13 +18,13 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Funcao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
-import br.com.caiqueferreira.ManegementPracticesBackend.Recurso.Excecao.FieldMessage;
 import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
 import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthorizationException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNotFoundException;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.UsernameNotFoundException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.Utils.BR;
 
 @Service
@@ -65,8 +65,9 @@ public class UsuarioServico {
 			lstDadosEmail.add(" Confirmação de Cadastro");
 			lstDadosEmail.add(obj.getNome());
 			lstDadosEmail.add(obj.getEmail());
-			lstDadosEmail.add("Senha : " + obj.getSenha());
-			lstDadosEmail.add("Seja Bem Vindo(a)s ao Manegement Practices.\n Segue abaixo os seus dados de acesso. \n");
+			lstDadosEmail.add(obj.getSenha());
+			lstDadosEmail.add("seja Bem Vindo(a) ao App Project Notification.");
+			lstDadosEmail.add("Segue abaixo os seus dados de acesso abaixo :");
 
 			obj.setId(null);
 			obj.setSenha(pe.encode(obj.getSenha()));
@@ -84,18 +85,22 @@ public class UsuarioServico {
 	public Usuario find(Integer id) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		}else if (!id.equals(user.getId())) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 		Optional<Usuario> obj = usuarioRepositorio.findById(id);
+		
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
 	}
-
 	public List<Usuario> findAll() {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		}else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
@@ -111,7 +116,7 @@ public class UsuarioServico {
 
 		Usuario usu = usuarioRepositorio.findByEmail(email);
 		if (usu == null) {
-			new ObjectNotFoundException("Email: " + email + "não encontrado , Tipo: " + Usuario.class.getName());
+			new UsernameNotFoundException("Email: " + email + "não encontrado , Tipo: " + Usuario.class.getName());
 		}
 		return usu;
 	}
@@ -129,28 +134,28 @@ public class UsuarioServico {
 	public Usuario update(Usuario obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN) && !obj.getId().equals(user.getId())) {
+		if (user == null || !obj.getId().equals(user.getId())) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
 		try {
-			Usuario usu = findByEmail(obj.getEmail());
+			Usuario usu =  findByEmail(obj.getEmail());
 			if (usu != null && !obj.getId().equals(usu.getId()))
 				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
 
 			List<String> lstDadosEmail = new ArrayList<>();
 
-			lstDadosEmail.add(" Alteração de Cadastro");
+			lstDadosEmail.add(" Alteração Cadastral");
 			lstDadosEmail.add(obj.getNome());
 			lstDadosEmail.add(obj.getEmail());
-			lstDadosEmail.add("Senha : " + obj.getSenha());
+			lstDadosEmail.add(obj.getSenha());
 			lstDadosEmail.add("Segue abaixo os seus dados de acesso. \n");
 
 			Usuario newObj = find(obj.getId());
 			updateData(newObj, obj);
 			usuarioRepositorio.save(newObj);
 
-			emailService.sendOrderConfirmationEmail(lstDadosEmail);
+			//emailService.sendOrderConfirmationEmail(lstDadosEmail);
 			return newObj;
 
 		} catch (DataIntegrityViolationException e) {
@@ -181,7 +186,7 @@ public class UsuarioServico {
 		if (objDto.getListaTipoMetodologia() == null) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
 		}
-
+		
 		List<TipoMetodologia> listTpMetodologia = new ArrayList<>();
 
 		for (Integer i : objDto.getListaTipoMetodologia()) {
@@ -196,7 +201,7 @@ public class UsuarioServico {
 	public Usuario fromDTO(UsuarioDTO objDto) {
 
 		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(), null,
-				Funcao.toEnum(objDto.getTipoFuncao()), objDto.getSenha());
+				Funcao.toEnum(objDto.getTipoFuncao()),null);
 
 		if (objDto.getListaTipoMetodologia() == null) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
@@ -218,7 +223,7 @@ public class UsuarioServico {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 		newObj.setTipoFuncao(obj.getTipoFuncao());
-		newObj.setSenha(pe.encode(obj.getSenha()));
+		newObj.setSenha(newObj.getSenha());
 		newObj.setListaTipoMetodologia(obj.getListaTipoMetodologia());
 	}
 }

@@ -33,12 +33,9 @@ public class AutenticacaoServico {
 		}
 		
 		String novaSenha = NovaSenha();
-		
-	    usu.setSenha(pe.encode(novaSenha));
-		
+		usu.setSenha(pe.encode(novaSenha));
 		usuRepositorio.save(usu);
-		emailServico.sendNewPasswordEmail(usu, novaSenha);
-		
+		emailServico.sendNewPasswordEmail(usu, novaSenha);	
 	}
 
 	private String NovaSenha() {

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.CredenciaisDTO;
 
+
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private AuthenticationManager authenticationManager;
@@ -48,6 +49,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		
+		
 	}
 	
 	@Override

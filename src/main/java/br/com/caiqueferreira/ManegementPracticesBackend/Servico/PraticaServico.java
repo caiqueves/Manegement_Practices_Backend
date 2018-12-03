@@ -2,7 +2,6 @@ package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -30,8 +29,6 @@ public class PraticaServico {
 	@Autowired
 	private TipoMetodologiaServico tipoMetodologiaServico;
 
-	private Random rand = new Random();
-	
 	@Transactional
 	public Pratica insert(Pratica obj) {
 

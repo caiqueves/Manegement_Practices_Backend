@@ -7,14 +7,13 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 
-@JsonPropertyOrder({"id","nome","email","tipoFuncao","senha","listaTipoMetodologia"})
+//@JsonPropertyOrder({"id","nome","email","tipoFuncao","senha","listaTipoMetodologia"})
 public class UsuarioDTO {
 
 	private Integer id;
+	
 	@NotEmpty(message = "Por favor, informe o nome. Preenchimento obrigatório !")
 	@Length(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres")
 	private String nome;
@@ -23,13 +22,10 @@ public class UsuarioDTO {
 	@Email(message = "Email inválido")
 	private String email;
 	
-	
 	private Integer tipoFuncao;
 	
-	@NotEmpty(message="Por favor, informe a senha. Preenchimento obrigatório !")
-	private String senha;
+	//private String senha;
     
-	
 	private List<Integer> listaTipoMetodologia;
 	
 	public UsuarioDTO() {}
@@ -39,7 +35,7 @@ public class UsuarioDTO {
 		id = obj.getId();
 		nome = obj.getNome();
 		email = obj.getEmail();
-		senha = obj.getSenha();
+		//senha = obj.getSenha();	
 	}
 
 	public Integer getId() {
@@ -73,7 +69,8 @@ public class UsuarioDTO {
 	public void setTipoFuncao(Integer tipoFuncao) {
 		this.tipoFuncao = tipoFuncao;
 	}
-
+    
+	/*
 	public String getSenha() {
 		return senha;
 	}
@@ -81,7 +78,8 @@ public class UsuarioDTO {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
+    */
+	
 	public List<Integer> getListaTipoMetodologia() {
 		return listaTipoMetodologia;
 	}
@@ -89,6 +87,4 @@ public class UsuarioDTO {
 	public void setListaTipoMetodologia(List<Integer> listaTipoMetodologia) {
 		this.listaTipoMetodologia = listaTipoMetodologia;
 	}
-
-	
 }

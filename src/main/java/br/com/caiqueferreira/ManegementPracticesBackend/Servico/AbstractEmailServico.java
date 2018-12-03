@@ -3,11 +3,9 @@ package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 
@@ -27,10 +25,14 @@ public abstract class AbstractEmailServico implements EmailServico {
 		SimpleMailMessage sm = new SimpleMailMessage();
 		sm.setTo(lstDadosEmail.get(2));
 		sm.setFrom(sender);
-		sm.setSubject("[Management Practices] " + lstDadosEmail.get(0));
+		sm.setSubject("[Project Notification] " + lstDadosEmail.get(0));
 		sm.setSentDate(new Date(System.currentTimeMillis()));
-		sm.setText("Olá,"  + lstDadosEmail.get(1).toUpperCase()  + "!\n\n" + lstDadosEmail.get(4) + "\n Email:" + lstDadosEmail.get(2) + "\n" + lstDadosEmail.get(3)
-		          +"\n\n Att \n Manegement Practices");
+		sm.setText("\nOlá,"  + lstDadosEmail.get(1).toUpperCase() +", "+ lstDadosEmail.get(4) 
+		+"\n\n" + lstDadosEmail.get(5) 
+		+ "\n\n    Email: " + lstDadosEmail.get(2).toUpperCase() 
+		+ "\n    Senha: " + lstDadosEmail.get(3).toUpperCase() 
+		+"\n\nCaso não tenha conhecimento dessa solicitação, pedimos que desconsidere o e-mail."
+        +"\n\nAtt \nEquipe do APP Project Notification");
 		return sm;
 	}
 	
@@ -45,10 +47,13 @@ public abstract class AbstractEmailServico implements EmailServico {
 		SimpleMailMessage sm = new SimpleMailMessage();
 		sm.setTo(obj.getEmail());
 		sm.setFrom(sender);
-		sm.setSubject("[Management Practices] Solicitação de Nova Senha");
+		sm.setSubject("[Project Notification] Solicitação de Nova Senha");
 		sm.setSentDate(new Date(System.currentTimeMillis()));
-		sm.setText("Olá,"  + obj.getNome().toUpperCase()  + "!\n\n Segue sua nova senha: " +  novaSenha.toUpperCase()
-        +"\n\n Att \n Manegement Practices");
+		sm.setText("\nOlá,"  + obj.getNome().toUpperCase()  
+		+ "!\nSegue sua nova senha de acesso ao aplicativo Project Notification." 
+		+ "\n\nSenha: " +novaSenha 
+		+"\n\nCaso não tenha conhecimento dessa solicitação, pedimos que desconsidere o e-mail."
+        +"\n\nAtt \nEquipe do APP Project Notification");
 		return sm;
 	}
 	

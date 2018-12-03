@@ -56,6 +56,8 @@ public class Usuario implements Serializable {
 			@JoinColumn(name = "id_usuario") }, inverseJoinColumns = { @JoinColumn(name = "id_tipoMetodologia") })
 	private List<TipoMetodologia> listaTipoMetodologia = new ArrayList<>();
 
+	
+	
 	public Usuario() {
 		addPerfil(Perfil.USUARIO);
 	}
@@ -126,7 +128,7 @@ public class Usuario implements Serializable {
 	public void setListaTipoMetodologia(List<TipoMetodologia> listaTipoMetodologia) {
 		this.listaTipoMetodologia = listaTipoMetodologia;
 	}
-
+	
 	public Set<Perfil> getPerfis() {
 		return Perfil_ID.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
 	}
@@ -135,6 +137,8 @@ public class Usuario implements Serializable {
 		Perfil_ID.add(perfil.getCod());
 	}
 
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -169,4 +173,6 @@ public class Usuario implements Serializable {
 		builder.append("Senha   : " + getSenha());
 		return builder.toString();
 	}
+
+	
 }

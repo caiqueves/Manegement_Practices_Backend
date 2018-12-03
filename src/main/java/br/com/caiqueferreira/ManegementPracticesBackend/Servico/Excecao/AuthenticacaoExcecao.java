@@ -1,14 +1,14 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao;
 
-public class AuthorizationException extends RuntimeException {
+public class AuthenticacaoExcecao extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public AuthorizationException(String msg) {
+	public AuthenticacaoExcecao(String msg) {
 		super(msg);
 	}
 	
-	public AuthorizationException(String msg, Throwable cause) {
+	public AuthenticacaoExcecao(String msg, Throwable cause) {
 		super(msg, cause);
 	}
 

@@ -8,8 +8,6 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.UsuarioInserir;
-
 
 public class UsuarioNovoDTO implements Serializable {
 
@@ -32,6 +30,7 @@ public class UsuarioNovoDTO implements Serializable {
 	private Integer tipoFuncao;
 
 	@NotEmpty(message = "Por favor, informe a senha. Preenchimento obrigatório !")
+	@Length(min = 6, max = 10, message = "O tamanho deve ter entre 6 a 10 caracteres")
 	private String senha;
 
 	private List<Integer> listaTipoMetodologia;
