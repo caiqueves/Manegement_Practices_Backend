@@ -10,7 +10,8 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.MockEmailServico
 @Configuration
 @Profile("desen")
 public class DesenvolvimentoConfiguracao {
-
+    
+	
 	@Bean
 	public EmailServico emailService() {
 		return new MockEmailServico();

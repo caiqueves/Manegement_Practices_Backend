@@ -87,8 +87,9 @@ public class PraticaServico {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
-		if (repositorio.findByDescricao(obj.getDescricao()) != null) {
-			throw new Excecao("Já existe um cadastro para a descrição: " + obj.getDescricao() + " informado.");
+		if ((repositorio.findByProblema(obj.getProblema()) != null) ||
+		   (repositorio.findBySolucao(obj.getSolucao()) != null)) {
+			throw new Excecao("Já existe um cadastro para o problema ou solução informada.");
 		}
 		try {
 			Pratica newObj = find(obj.getId());
@@ -124,13 +125,17 @@ public class PraticaServico {
 
 		TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(objDto.getTipoMetodologia());
 
-		Pratica pra = new Pratica(null, objDto.getDescricao(), tpMeto);
+		Pratica pra = new Pratica(null, objDto.getEtapa(),objDto.getProblema(), objDto.getSolucao(), 
+				                  objDto.getFonte(), tpMeto);
 
 		return pra;
 	}
 
 	private void updateData(Pratica newObj, Pratica obj) {
 
-		newObj.setDescricao(obj.getDescricao());
+		newObj.setEtapa(obj.getEtapa());
+		newObj.setProblema(obj.getProblema());
+		newObj.setFonte(obj.getFonte());
+		newObj.setTipoMetodologia(obj.getTipoMetodologia());
 	}
 }

@@ -19,23 +19,33 @@ public class Pratica implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String descricao;
-
+	
+	private String etapa;
+	
+	private String problema;
+	
+	private String solucao;
+	
+	private String fonte;
+	
 	
 	@OneToOne
 	@JoinColumn(name = "tipoMetodologia_id")
 	private TipoMetodologia tipoMetodologia;
 
-	public Pratica() {
-
-	}
-
-	public Pratica(Integer id, String descricao, TipoMetodologia tipoMetodologia) {
+	
+	public Pratica(Integer id, String etapa, String problema, String solucao, String fonte,
+			TipoMetodologia tipoMetodologia) {
 		super();
 		this.id = id;
-		this.descricao = descricao;
+		this.etapa = etapa;
+		this.problema = problema;
+		this.solucao = solucao;
+		this.fonte = fonte;
 		this.tipoMetodologia = tipoMetodologia;
 	}
+
+
 
 	public Integer getId() {
 		return id;
@@ -45,13 +55,55 @@ public class Pratica implements Serializable {
 		this.id = id;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	
+
+	public String getEtapa() {
+		return etapa;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+
+
+	public void setEtapa(String etapa) {
+		this.etapa = etapa;
 	}
+
+
+
+	public String getProblema() {
+		return problema;
+	}
+
+
+
+	public void setProblema(String problema) {
+		this.problema = problema;
+	}
+
+
+
+	public String getSolucao() {
+		return solucao;
+	}
+
+
+
+	public void setSolucao(String solucao) {
+		this.solucao = solucao;
+	}
+
+
+
+	public String getFonte() {
+		return fonte;
+	}
+
+
+
+	public void setFonte(String fonte) {
+		this.fonte = fonte;
+	}
+
+
 
 	public TipoMetodologia getTipoMetodologia() {
 		return tipoMetodologia;

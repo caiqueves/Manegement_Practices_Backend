@@ -34,32 +34,25 @@ public class DBServico {
 
 	@Autowired
 	public void instantiateTestDatabase() throws ParseException {
-
+		
 		TipoMetodologia tipomet1 = new TipoMetodologia(null,"Metodologias Tradicionais");
 	    TipoMetodologia tipomet2 = new TipoMetodologia(null,"Metodologias Ageis");
 		TipoMetodologia tipomet3 = new TipoMetodologia(null,"Metodologias 3.0");
 		
 		tipoMetodologiaRepositorio.saveAll(Arrays.asList(tipomet1,tipomet2,tipomet3));
+			
+		Pratica pra1 = new Pratica(null
+				,"TESTE"
+				,"Tem dificuldade na identificação de gargalos e pontos que merecem atenção especial nos testes do software ?"
+				,"Adote a proposta de distribuir as atividades entre os integrantes do projeto,onde os lideres e gestores adotam o papel de mediador, facilitador dos problemas."
+				,"MONTEIRO, Edivaldo Antonio. Utilização de técnicas ágeis em projetos exclusivos de teste de software. 2017."				
+                ,tipomet1);
+                
+		praticaRepositorio.saveAll(Arrays.asList(pra1));
 		
-		
-		Pratica pra1 = new Pratica(null, "teste1", tipomet1);
-		Pratica pra2 = new Pratica(null, "teste2", tipomet1);
-		Pratica pra3 = new Pratica(null, "teste3", tipomet1);
-		Pratica pra4 = new Pratica(null, "teste4", tipomet1);
-		Pratica pra5 = new Pratica(null, "teste5", tipomet1);
-		Pratica pra6 = new Pratica(null, "teste6", tipomet1);
-		Pratica pra7 = new Pratica(null, "teste7", tipomet1);
-		
-		praticaRepositorio.saveAll(Arrays.asList(pra1,pra2,pra3,pra4,pra5,pra6,pra7));
-		
-		
-	
-				
-		Usuario lg1 = new Usuario(null, "caique ferreira","caique.sire2@gmail.com", "09157332428",
+		Usuario lg1 = new Usuario(null, "caique ferreira","caique.sire@gmail.com", "09157332428",
 				Funcao.GERENTE, pe.encode("12345"));
 		lg1.addPerfil(Perfil.ADMIN);
 		usuarioRepositorio.save(lg1);
-		
-		
 	}
 }

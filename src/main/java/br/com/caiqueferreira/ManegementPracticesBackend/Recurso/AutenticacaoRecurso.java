@@ -15,6 +15,10 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.JWTUtil;
 import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.AutenticacaoServico;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.UserService;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthenticacaoExcecao;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthorizationException;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 
 @RestController
 @RequestMapping(value = "/autenticacao")
@@ -28,18 +32,35 @@ public class AutenticacaoRecurso {
 	
 	
 	@RequestMapping(value = "/atualizar_token", method = RequestMethod.POST)
-	public ResponseEntity<Void> refreshToken(HttpServletResponse response) {
+	public ResponseEntity<?> refreshToken(HttpServletResponse response) {
+		try {
 		UserSS user = UserService.authenticated();
 		String token = jwtUtil.generateToken(user.getUsername());
 		response.addHeader("Authorization", "Bearer " + token);
 		response.addHeader("access-control-expose-headers", "Authorization");
 		return ResponseEntity.noContent().build();
+		}catch(AuthenticacaoExcecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
+		}catch(AuthorizationException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
+		}catch( Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
+		}	
 	}
 
 	@RequestMapping(value = "/esqueciSenha", method = RequestMethod.POST)
-	public ResponseEntity<Void> EsqueciSenha(@Valid @RequestBody EmailDTO objDTO) {
+	public ResponseEntity<?> EsqueciSenha(@Valid @RequestBody EmailDTO objDTO) {
+	try {
 		autservico.sendNewPassword(objDTO.getEmail());
-		return ResponseEntity.noContent().build();
-	}
-	
+	    return ResponseEntity.badRequest().body("{\"message\": \"Senha enviada com sucesso, para o e-mail informado!\"}"); 
+	}catch(AuthenticacaoExcecao e) {
+		return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
+	}catch(AuthorizationException e) {
+		return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
+	}catch (DataIntegrityException e ) {
+		return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
+	}catch( Excecao e) {
+		return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
+	}		
+   }
 }

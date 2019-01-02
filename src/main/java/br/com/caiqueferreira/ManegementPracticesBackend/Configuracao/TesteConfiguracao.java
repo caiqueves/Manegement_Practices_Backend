@@ -8,7 +8,7 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.EmailServico;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.MockEmailServico;
 
 @Configuration
-@Profile("desenH2")
+@Profile("test")
 public class TesteConfiguracao {
 
 	@Bean

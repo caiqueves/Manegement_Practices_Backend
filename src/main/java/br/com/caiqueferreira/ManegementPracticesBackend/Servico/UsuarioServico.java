@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Funcao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
 import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
 import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthenticacaoExcecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthorizationException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
@@ -59,7 +61,7 @@ public class UsuarioServico {
 
 			if (findByEmail(obj.getEmail()) != null)
 				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
-
+			
 			List<String> lstDadosEmail = new ArrayList<>();
 
 			lstDadosEmail.add(" Confirmação de Cadastro");
@@ -71,19 +73,29 @@ public class UsuarioServico {
 
 			obj.setId(null);
 			obj.setSenha(pe.encode(obj.getSenha()));
-			obj = usuarioRepositorio.save(obj);
+			
 
-			emailService.sendOrderConfirmationEmail(lstDadosEmail);
+			try {
+			 emailService.sendOrderConfirmationEmail(lstDadosEmail);
+			} catch (AuthenticacaoExcecao e) {
+				throw new AuthenticacaoExcecao("Não foi possível enviar o e-mail para o usuário.");
+			}
+            
+			try {
+			obj = usuarioRepositorio.save(obj);
+			}catch (DataIntegrityViolationException e) {
+				throw new DataIntegrityException("Não foi possível inserir o usuário.");
+			}
+			 
 			lstDadosEmail = null;
 			return obj;
-
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não foi possível inserir o usuário. Tipo: " + e.getMessage());
+		}catch (Excecao e) {
+			throw new Excecao("Erro" + e.getMessage());
 		}
 	}
 	
 	public Usuario find(Integer id) {
-
+     try {
 		UserSS user = UserService.authenticated();
 		if (user == null) {
 			throw new UsernameNotFoundException("O usuário não foi localizado.");
@@ -94,6 +106,11 @@ public class UsuarioServico {
 		
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
+     }catch(UsernameNotFoundException e) {
+    	 throw new UsernameNotFoundException (e.getMessage());
+	 }catch(AuthenticacaoExcecao e) {
+		 throw new AuthenticacaoExcecao( "Não foi possível efetuar a authenticacao com o servidor."); 
+	 }
 	}
 	public List<Usuario> findAll() {
 
@@ -143,23 +160,36 @@ public class UsuarioServico {
 			if (usu != null && !obj.getId().equals(usu.getId()))
 				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
 
+			/*
 			List<String> lstDadosEmail = new ArrayList<>();
 
 			lstDadosEmail.add(" Alteração Cadastral");
 			lstDadosEmail.add(obj.getNome());
 			lstDadosEmail.add(obj.getEmail());
-			lstDadosEmail.add(obj.getSenha());
+			lstDadosEmail.add(newObj.getSenha());
 			lstDadosEmail.add("Segue abaixo os seus dados de acesso. \n");
-
+            */
 			Usuario newObj = find(obj.getId());
 			updateData(newObj, obj);
-			usuarioRepositorio.save(newObj);
-
-			//emailService.sendOrderConfirmationEmail(lstDadosEmail);
+			
+			/*
+			try {
+				 emailService.sendOrderConfirmationEmail(lstDadosEmail);
+			} catch (AuthenticacaoExcecao e) {
+					throw new AuthenticacaoExcecao("Não foi possível enviar o e-mail para o usuário.");
+			}
+			*/
+			try {
+				newObj = usuarioRepositorio.save(newObj);
+			}catch (DataIntegrityViolationException e) {
+					throw new DataIntegrityException("Não foi possível atualizar o usuário.");
+			}
+			
+			//lstDadosEmail = null;
 			return newObj;
 
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não foi possivel alterar o usuário. Tipo: " + e.getMessage());
+		} catch (Excecao e) {
+			throw new Excecao("Erro" + e.getMessage());
 		}
 	}
 

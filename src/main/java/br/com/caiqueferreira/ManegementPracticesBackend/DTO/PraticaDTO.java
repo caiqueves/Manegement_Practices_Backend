@@ -12,8 +12,21 @@ public class PraticaDTO {
 	
 	@NotEmpty(message = "Preenchimento obrigatório")
 	@Length(min = 5, max = 100, message = "O tamanho deve ser entre 5 e 100 caracteres")
-	private String descricao;
+	private String etapa;
 	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min = 50, max = 500, message = "O tamanho deve ser entre 50 e 500 caracteres")
+	private String problema;
+	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min = 50, max = 500, message = "O tamanho deve ser entre 50 e 500 caracteres")
+	private String solucao;
+	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min = 50, max = 500, message = "O tamanho deve ser entre 50 e 500 caracteres")
+	private String fonte;
+	
+	@NotEmpty(message = "Preenchimento obrigatório")
 	Integer tipoMetodologia;
 
 	public PraticaDTO() {
@@ -23,7 +36,10 @@ public class PraticaDTO {
 	public PraticaDTO(Pratica obj) {
 		super();
 		this.id = obj.getId();
-		this.descricao = obj.getDescricao();
+		this.etapa = obj.getEtapa();
+		this.problema = obj.getProblema();
+		this.solucao = obj.getSolucao();
+		this.fonte = obj.getFonte();
 	}
 
 	public Integer getId() {
@@ -34,12 +50,38 @@ public class PraticaDTO {
 		this.id = id;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	
+
+	public String getEtapa() {
+		return etapa;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setEtapa(String etapa) {
+		this.etapa = etapa;
+	}
+
+	public String getProblema() {
+		return problema;
+	}
+
+	public void setProblema(String problema) {
+		this.problema = problema;
+	}
+
+	public String getSolucao() {
+		return solucao;
+	}
+
+	public void setSolucao(String solucao) {
+		this.solucao = solucao;
+	}
+
+	public String getFonte() {
+		return fonte;
+	}
+
+	public void setFonte(String fonte) {
+		this.fonte = fonte;
 	}
 
 	public Integer getTipoMetodologia() {
