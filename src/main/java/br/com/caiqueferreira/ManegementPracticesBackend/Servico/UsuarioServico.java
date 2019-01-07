@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,20 +47,20 @@ public class UsuarioServico {
 	public Usuario insert(Usuario obj) {
 
 		try {
-			
+
 			if ((obj.getCpfOuCnpj().length() == 11) && !BR.isValidCPF(obj.getCpfOuCnpj())) {
 				throw new Excecao("CPF inválido");
 			}
-	 		if ((obj.getCpfOuCnpj().length() == 14) && !BR.isValidCNPJ(obj.getCpfOuCnpj())) {
-	 			throw new Excecao("CNPJ inválido");
+			if ((obj.getCpfOuCnpj().length() == 14) && !BR.isValidCNPJ(obj.getCpfOuCnpj())) {
+				throw new Excecao("CNPJ inválido");
 			}
-				
+
 			if (findByCpfOuCnpj(obj.getCpfOuCnpj()) != null)
 				throw new Excecao("Já existe um cadastro para o CPF:   " + obj.getCpfOuCnpj() + " informado.");
 
 			if (findByEmail(obj.getEmail()) != null)
 				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
-			
+
 			List<String> lstDadosEmail = new ArrayList<>();
 
 			lstDadosEmail.add(" Confirmação de Cadastro");
@@ -73,51 +72,52 @@ public class UsuarioServico {
 
 			obj.setId(null);
 			obj.setSenha(pe.encode(obj.getSenha()));
-			
 
 			try {
-			 emailService.sendOrderConfirmationEmail(lstDadosEmail);
+				emailService.sendOrderConfirmationEmail(lstDadosEmail);
 			} catch (AuthenticacaoExcecao e) {
 				throw new AuthenticacaoExcecao("Não foi possível enviar o e-mail para o usuário.");
 			}
-            
+
 			try {
-			obj = usuarioRepositorio.save(obj);
-			}catch (DataIntegrityViolationException e) {
+				obj = usuarioRepositorio.save(obj);
+			} catch (DataIntegrityViolationException e) {
 				throw new DataIntegrityException("Não foi possível inserir o usuário.");
 			}
-			 
+
 			lstDadosEmail = null;
 			return obj;
-		}catch (Excecao e) {
-			throw new Excecao("Erro" + e.getMessage());
+		} catch (Excecao e) {
+			throw new Excecao(e.getMessage());
 		}
 	}
-	
+
 	public Usuario find(Integer id) {
-     try {
-		UserSS user = UserService.authenticated();
-		if (user == null) {
-			throw new UsernameNotFoundException("O usuário não foi localizado.");
-		}else if (!id.equals(user.getId())) {
-			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
+		try {
+			UserSS user = UserService.authenticated();
+			if (user == null) {
+				throw new UsernameNotFoundException("O usuário não foi localizado.");
+			} else if (!id.equals(user.getId())) {
+				throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
+			}
+			Optional<Usuario> obj = usuarioRepositorio.findById(id);
+
+			return obj.orElseThrow(() -> new ObjectNotFoundException(
+					"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
+		} catch (UsernameNotFoundException e) {
+			throw new UsernameNotFoundException(e.getMessage());
+		} catch (Excecao e) {
+			throw new Excecao(e.getMessage());
 		}
-		Optional<Usuario> obj = usuarioRepositorio.findById(id);
-		
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getName()));
-     }catch(UsernameNotFoundException e) {
-    	 throw new UsernameNotFoundException (e.getMessage());
-	 }catch(AuthenticacaoExcecao e) {
-		 throw new AuthenticacaoExcecao( "Não foi possível efetuar a authenticacao com o servidor."); 
-	 }
+
 	}
+
 	public List<Usuario> findAll() {
 
 		UserSS user = UserService.authenticated();
 		if (user == null) {
 			throw new UsernameNotFoundException("O usuário não foi localizado.");
-		}else if (!user.hasRole(Perfil.ADMIN)) {
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
@@ -147,60 +147,57 @@ public class UsuarioServico {
 		}
 		return usu;
 	}
-	
+
 	public Usuario update(Usuario obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !obj.getId().equals(user.getId())) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
 		try {
-			Usuario usu =  findByEmail(obj.getEmail());
-			if (usu != null && !obj.getId().equals(usu.getId()))
+
+			if ((obj.getCpfOuCnpj().length() == 11) && !BR.isValidCPF(obj.getCpfOuCnpj())) {
+				throw new Excecao("CPF inválido");
+			}
+			if ((obj.getCpfOuCnpj().length() == 14) && !BR.isValidCNPJ(obj.getCpfOuCnpj())) {
+				throw new Excecao("CNPJ inválido");
+			}
+
+			if (findByCpfOuCnpj(obj.getCpfOuCnpj()) != null)
+				throw new Excecao("Já existe um cadastro para o CPF:   " + obj.getCpfOuCnpj() + " informado.");
+
+			if (findByEmail(obj.getEmail()) != null)
 				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
 
-			/*
-			List<String> lstDadosEmail = new ArrayList<>();
-
-			lstDadosEmail.add(" Alteração Cadastral");
-			lstDadosEmail.add(obj.getNome());
-			lstDadosEmail.add(obj.getEmail());
-			lstDadosEmail.add(newObj.getSenha());
-			lstDadosEmail.add("Segue abaixo os seus dados de acesso. \n");
-            */
 			Usuario newObj = find(obj.getId());
 			updateData(newObj, obj);
-			
-			/*
-			try {
-				 emailService.sendOrderConfirmationEmail(lstDadosEmail);
-			} catch (AuthenticacaoExcecao e) {
-					throw new AuthenticacaoExcecao("Não foi possível enviar o e-mail para o usuário.");
-			}
-			*/
+
 			try {
 				newObj = usuarioRepositorio.save(newObj);
-			}catch (DataIntegrityViolationException e) {
-					throw new DataIntegrityException("Não foi possível atualizar o usuário.");
+			} catch (DataIntegrityViolationException e) {
+				throw new DataIntegrityException("Não foi possível atualizar o usuário.");
 			}
-			
-			//lstDadosEmail = null;
-			return newObj;
 
+			return newObj;
 		} catch (Excecao e) {
-			throw new Excecao("Erro" + e.getMessage());
+			throw new Excecao(e.getMessage());
 		}
 	}
 
 	public void delete(Integer id) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
 		find(id);
+
 		try {
 			usuarioRepositorio.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
@@ -210,19 +207,26 @@ public class UsuarioServico {
 
 	public Usuario fromDTO(UsuarioNovoDTO objDto) {
 
-		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(),
-				Funcao.toEnum(objDto.getTipoFuncao()), objDto.getSenha());
+		if (objDto.getTipoFuncao() == null || objDto.getTipoFuncao() == 0) {
+			throw new Excecao("É necessário informar pelo menos uma função.");
+		}
 
-		if (objDto.getListaTipoMetodologia() == null) {
+		if (objDto.getListaTipoMetodologia() == null ) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
 		}
-		
+
 		List<TipoMetodologia> listTpMetodologia = new ArrayList<>();
 
 		for (Integer i : objDto.getListaTipoMetodologia()) {
+			if (i == 0) {
+				throw new Excecao("É necessário informar pelo menos um tipo de metodologia diferente de zero.");
+			}
 			TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(i);
 			listTpMetodologia.add(tpMeto);
 		}
+
+		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(),
+				Funcao.toEnum(objDto.getTipoFuncao()), objDto.getSenha());
 
 		usu.setListaTipoMetodologia(listTpMetodologia);
 		return usu;
@@ -230,8 +234,9 @@ public class UsuarioServico {
 
 	public Usuario fromDTO(UsuarioDTO objDto) {
 
-		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(), null,
-				Funcao.toEnum(objDto.getTipoFuncao()),null);
+		if (objDto.getTipoFuncao() == null || objDto.getTipoFuncao() == 0) {
+			throw new Excecao("É necessário informar pelo menos uma função.");
+		}
 
 		if (objDto.getListaTipoMetodologia() == null) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
@@ -243,6 +248,9 @@ public class UsuarioServico {
 			TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(i);
 			listTpMetodologia.add(tpMeto);
 		}
+
+		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(), null,
+				Funcao.toEnum(objDto.getTipoFuncao()), null);
 
 		usu.setListaTipoMetodologia(listTpMetodologia);
 		return usu;

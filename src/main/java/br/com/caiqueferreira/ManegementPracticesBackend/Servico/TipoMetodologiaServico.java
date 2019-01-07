@@ -18,21 +18,30 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Authoriz
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNotFoundException;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.UsernameNotFoundException;
 
 @Service
 public class TipoMetodologiaServico {
 
 	@Autowired
 	private TipoMetodologiaRepositorio repositorio;
-
+	
 	@Transactional
 	public TipoMetodologia insert(TipoMetodologia obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
+
 		try {
+			
+			if (repositorio.findByDescricao(obj.getDescricao()) != null) {
+				throw new Excecao("Já existe um cadastro para a descrição: " + obj.getDescricao() + " informado.");
+			}
+			
 			obj.setId(null);
 			obj = repositorio.save(obj);
 			return obj;
@@ -51,7 +60,9 @@ public class TipoMetodologiaServico {
 	public List<TipoMetodologia> findAll() {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
@@ -67,28 +78,34 @@ public class TipoMetodologiaServico {
 	public TipoMetodologia update(TipoMetodologia obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
 		if (repositorio.findByDescricao(obj.getDescricao()) != null) {
 			throw new Excecao("Já existe um cadastro para a descrição: " + obj.getDescricao() + " informado.");
 		}
-		try {
-			TipoMetodologia newObj = find(obj.getId());
-			updateData(newObj, obj);
-			repositorio.save(newObj);
-			return newObj;
 
+		TipoMetodologia newObj = find(obj.getId());
+
+		updateData(newObj, obj);
+		try {
+			repositorio.save(newObj);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não foi possível alterar o tipo de metodologia. Tipo: " + e.getMessage());
 		}
+
+		return newObj;
 	}
 
 	public void delete(Integer id) {
-
+		
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 

@@ -19,6 +19,7 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Authoriz
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNotFoundException;
+import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.UsernameNotFoundException;
 
 @Service
 public class PraticaServico {
@@ -33,16 +34,34 @@ public class PraticaServico {
 	public Pratica insert(Pratica obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
+
 		try {
+
+			if (repositorio.findByProblema(obj.getProblema()) != null) {
+				throw new Excecao("Já existe um cadastro para o problema informado.");
+			}
+
+			if (repositorio.findBySolucao(obj.getSolucao()) != null) {
+				throw new Excecao("Já existe um cadastro para a solução informada.");
+			}
+
 			obj.setId(null);
-			obj = repositorio.save(obj);
+
+			try {
+				obj = repositorio.save(obj);
+			} catch (DataIntegrityViolationException e) {
+				throw new DataIntegrityException("Não foi possível inserir a prática. Tipo: " + e.getMessage());
+			}
+
 			return obj;
 
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não foi possível inserir a prática. Tipo: " + e.getMessage());
+		} catch (Excecao e) {
+			throw new DataIntegrityException(e.getMessage());
 		}
 	}
 
@@ -55,7 +74,9 @@ public class PraticaServico {
 	public List<Pratica> findAll() {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
@@ -68,37 +89,46 @@ public class PraticaServico {
 		return pralist;
 	}
 
-	public Pratica findAleatoria()
-	{  
-		Pratica pra = find((int)BetweenRange(1,repositorio.findAleatoria()));
+	public Pratica findAleatoria() {
+		Pratica pra = find((int) BetweenRange(1, repositorio.findAleatoria()));
 		return pra;
-		
 	}
-	
-	public static double BetweenRange(double min, double max){
-	    double x = (Math.random()*((max-min)+1))+min;
-	    return x;
+
+	public static double BetweenRange(double min, double max) {
+		double x = (Math.random() * ((max - min) + 1)) + min;
+		return x;
 	}
-	
+
 	public Pratica update(Pratica obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null || !user.hasRole(Perfil.ADMIN)) {
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
-		if ((repositorio.findByProblema(obj.getProblema()) != null) ||
-		   (repositorio.findBySolucao(obj.getSolucao()) != null)) {
-			throw new Excecao("Já existe um cadastro para o problema ou solução informada.");
+		if (repositorio.findByProblema(obj.getProblema()) != null) {
+			throw new Excecao("Já existe um cadastro para o problema informado.");
 		}
+
+		if (repositorio.findBySolucao(obj.getSolucao()) != null) {
+			throw new Excecao("Já existe um cadastro para a solução informada.");
+		}
+
 		try {
 			Pratica newObj = find(obj.getId());
 			updateData(newObj, obj);
-			repositorio.save(newObj);
+
+			try {
+				repositorio.save(newObj);
+			} catch (DataIntegrityException e) {
+				throw new DataIntegrityException(e.getMessage());
+			}
 			return newObj;
 
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não foi possível alterar a prática. Tipo: " + e.getMessage());
+		} catch (Excecao e) {
+			throw new Excecao(e.getMessage());
 		}
 	}
 
@@ -125,8 +155,8 @@ public class PraticaServico {
 
 		TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(objDto.getTipoMetodologia());
 
-		Pratica pra = new Pratica(null, objDto.getEtapa(),objDto.getProblema(), objDto.getSolucao(), 
-				                  objDto.getFonte(), tpMeto);
+		Pratica pra = new Pratica(null, objDto.getEtapa(), objDto.getProblema(), objDto.getSolucao(), objDto.getFonte(),
+				tpMeto);
 
 		return pra;
 	}

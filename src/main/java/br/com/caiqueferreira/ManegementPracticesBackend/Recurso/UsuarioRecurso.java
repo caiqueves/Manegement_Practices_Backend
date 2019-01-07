@@ -39,12 +39,12 @@ public class UsuarioRecurso {
 			//		.path("/{id}").buildAndExpand(obj.getId()).toUri();
 			//return ResponseEntity.created(uri).build();	
 			return ResponseEntity.badRequest().body("{\"id\": \"" +obj.getId() + "\",\"message\": \"Usuário cadastrado com sucesso!\"}"); 
+		}catch(AuthenticacaoExcecao e) {
+		    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
 		}catch(AuthorizationException e) {
 			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
 		}catch (DataIntegrityException e ) {
 			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
-		}catch( ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
 		}catch( Excecao e) {
 			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
 		}		
@@ -99,6 +99,7 @@ public class UsuarioRecurso {
 		obj.setId(id);
 		obj = servico.update(obj);
 		return ResponseEntity.badRequest().body("{\"message\": \"Usuário alterado com sucesso!\"}"); 
+		
 		}catch(UsernameNotFoundException e) {
 	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
 	    }catch(AuthenticacaoExcecao e) {

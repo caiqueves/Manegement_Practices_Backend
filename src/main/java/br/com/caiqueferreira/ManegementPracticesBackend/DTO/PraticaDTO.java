@@ -10,23 +10,23 @@ public class PraticaDTO {
 
 	private Integer id;
 	
-	@NotEmpty(message = "Preenchimento obrigatório")
-	@Length(min = 5, max = 100, message = "O tamanho deve ser entre 5 e 100 caracteres")
+	
+	@NotEmpty(message = "Por favor, informe o etapa. Preenchimento obrigatório !")
+	@Length(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres")
 	private String etapa;
 	
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "Por favor, informe o problema. Preenchimento obrigatório !")
 	@Length(min = 50, max = 500, message = "O tamanho deve ser entre 50 e 500 caracteres")
 	private String problema;
 	
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "Por favor, informe a solução. Preenchimento obrigatório !")
 	@Length(min = 50, max = 500, message = "O tamanho deve ser entre 50 e 500 caracteres")
 	private String solucao;
 	
-	@NotEmpty(message = "Preenchimento obrigatório")
+	@NotEmpty(message = "Por favor, informe a fonte. Preenchimento obrigatório !")
 	@Length(min = 50, max = 500, message = "O tamanho deve ser entre 50 e 500 caracteres")
 	private String fonte;
 	
-	@NotEmpty(message = "Preenchimento obrigatório")
 	Integer tipoMetodologia;
 
 	public PraticaDTO() {
