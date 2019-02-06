@@ -75,7 +75,7 @@ public class TipoMetodologiaRecurso {
 		}
 	}
 
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> findAll() {
 		try {

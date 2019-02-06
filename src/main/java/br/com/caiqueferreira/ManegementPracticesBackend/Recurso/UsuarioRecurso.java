@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.caiqueferreira.ManegementPracticesBackend.DTO.EmailDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioNovoDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
@@ -38,7 +39,7 @@ public class UsuarioRecurso {
 			//URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 			//		.path("/{id}").buildAndExpand(obj.getId()).toUri();
 			//return ResponseEntity.created(uri).build();	
-			return ResponseEntity.badRequest().body("{\"id\": \"" +obj.getId() + "\",\"message\": \"Usuário cadastrado com sucesso!\"}"); 
+			return ResponseEntity.ok().body("{\"id\": \"" +obj.getId() + "\",\"message\": \"Usuário cadastrado com sucesso!\"}"); 
 		}catch(AuthenticacaoExcecao e) {
 		    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
 		}catch(AuthorizationException e) {
@@ -54,8 +55,28 @@ public class UsuarioRecurso {
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 	  try {
 		Usuario obj = servico.find(id);
-		return ResponseEntity.badRequest().body(obj);
+		return ResponseEntity.ok().body(obj);
 	    }catch(UsernameNotFoundException e) {
+	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
+	    }catch(AuthenticacaoExcecao e) {
+	    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
+	    }catch(AuthorizationException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
+		}catch (DataIntegrityException e ) {
+			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
+		}catch( ObjectNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
+		}catch( Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
+		}	
+	}
+	
+	@RequestMapping(value = "/email", method = RequestMethod.POST)
+	public ResponseEntity<?> EsqueciSenha(@Valid @RequestBody EmailDTO objDTO) {
+		try {
+			Usuario obj = servico.findByEmail(objDTO.getEmail());
+			return ResponseEntity.ok().body(obj);
+		}catch(UsernameNotFoundException e) {
 	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
 	    }catch(AuthenticacaoExcecao e) {
 	    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
@@ -98,7 +119,7 @@ public class UsuarioRecurso {
 		Usuario obj = servico.fromDTO(objDto);
 		obj.setId(id);
 		obj = servico.update(obj);
-		return ResponseEntity.badRequest().body("{\"message\": \"Usuário alterado com sucesso!\"}"); 
+		return ResponseEntity.ok().body("{\"message\": \"Usuário alterado com sucesso!\"}"); 
 		
 		}catch(UsernameNotFoundException e) {
 	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
@@ -120,7 +141,7 @@ public class UsuarioRecurso {
 		try {
 		
 		servico.delete(id);
-		return ResponseEntity.badRequest().body("{\"message\": \"Usuário excluído com sucesso!\"}");	
+		return ResponseEntity.ok().body("{\"message\": \"Usuário excluído com sucesso!\"}");	
 		
 		}catch(UsernameNotFoundException e) {
 	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 

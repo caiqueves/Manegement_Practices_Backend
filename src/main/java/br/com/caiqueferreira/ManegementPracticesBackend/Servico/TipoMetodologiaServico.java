@@ -58,14 +58,14 @@ public class TipoMetodologiaServico {
 	}
 
 	public List<TipoMetodologia> findAll() {
-
+        /*
 		UserSS user = UserService.authenticated();
 		if (user == null) {
 			throw new UsernameNotFoundException("O usuário não foi localizado.");
 		} else if (!user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
-
+        */
 		List<TipoMetodologia> metolist = repositorio.findAll();
 
 		if (metolist.isEmpty()) {

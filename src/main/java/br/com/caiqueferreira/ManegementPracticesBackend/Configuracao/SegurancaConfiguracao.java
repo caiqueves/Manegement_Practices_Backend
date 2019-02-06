@@ -47,10 +47,10 @@ public class SegurancaConfiguracao extends WebSecurityConfigurerAdapter {
 	};
 
 	private static final String[] PUBLIC_MATCHERS_POST = {
-			"/usuario/**",		
+			"/usuario/",
 			"/autenticacao/esqueciSenha/**"
 	};
-
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		

@@ -51,7 +51,7 @@ public class DBServico {
 		praticaRepositorio.saveAll(Arrays.asList(pra1));
 		
 		Usuario lg1 = new Usuario(null, "caique ferreira","caique.sire@gmail.com", "09157332428",
-				Funcao.GERENTE, pe.encode("12345"));
+				Funcao.GERENTE, pe.encode("123456"));
 		lg1.addPerfil(Perfil.ADMIN);
 		usuarioRepositorio.save(lg1);
 	}

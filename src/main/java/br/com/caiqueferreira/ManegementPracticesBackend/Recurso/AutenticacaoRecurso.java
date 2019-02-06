@@ -52,11 +52,11 @@ public class AutenticacaoRecurso {
 		}
 	}
 
-	@RequestMapping(value = "/esqueciSenha", method = RequestMethod.PUT)
+	@RequestMapping(value = "/esqueciSenha", method = RequestMethod.POST)
 	public ResponseEntity<?> EsqueciSenha(@Valid @RequestBody EmailDTO objDTO) {
 		try {
 			autservico.sendNewPassword(objDTO.getEmail());
-			return ResponseEntity.badRequest()
+			return ResponseEntity.ok()
 					.body("{\"message\": \"Senha enviada com sucesso, para o e-mail informado!\"}");
 			
 		} catch (AuthenticacaoExcecao e) {
