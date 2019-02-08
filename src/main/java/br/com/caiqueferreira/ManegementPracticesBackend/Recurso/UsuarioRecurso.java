@@ -29,132 +29,141 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNo
 public class UsuarioRecurso {
 
 	@Autowired
-	private UsuarioServico servico;	
+	private UsuarioServico servico;
 
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> insert(@Valid @RequestBody UsuarioNovoDTO objDto) throws Excecao {
 		try {
 			Usuario obj = servico.fromDTO(objDto);
 			obj = servico.insert(obj);
-			//URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-			//		.path("/{id}").buildAndExpand(obj.getId()).toUri();
-			//return ResponseEntity.created(uri).build();	
-			return ResponseEntity.ok().body("{\"id\": \"" +obj.getId() + "\",\"message\": \"Usuário cadastrado com sucesso!\"}"); 
-		}catch(AuthenticacaoExcecao e) {
-		    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
-		}catch(AuthorizationException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
-		}catch (DataIntegrityException e ) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
-		}catch( Excecao e) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
-		}		
+			return ResponseEntity.ok()
+					.body("{\"id\": \"" + obj.getId() + "\",\"message\": \"Usuário cadastrado com sucesso!\"}");
+		} catch (AuthenticacaoExcecao e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
+		} catch (AuthorizationException e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+		} catch (DataIntegrityException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		} catch (Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		}
 	}
-	
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-	  try {
-		Usuario obj = servico.find(id);
-		return ResponseEntity.ok().body(obj);
-	    }catch(UsernameNotFoundException e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-	    }catch(AuthenticacaoExcecao e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
-	    }catch(AuthorizationException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
-		}catch (DataIntegrityException e ) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
-		}catch( ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-		}catch( Excecao e) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
-		}	
+		try {
+			Usuario obj = servico.find(id);
+			return ResponseEntity.ok().body(obj);
+		} catch (UsernameNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (AuthenticacaoExcecao e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
+		} catch (AuthorizationException e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+		} catch (DataIntegrityException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		} catch (ObjectNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		}
 	}
-	
-	@RequestMapping(value = "/email", method = RequestMethod.POST)
-	public ResponseEntity<?> EsqueciSenha(@Valid @RequestBody EmailDTO objDTO) {
+
+	@RequestMapping(value = "/emailUsuario", method = RequestMethod.POST)
+	public ResponseEntity<?> findUsuarioEmail(@Valid @RequestBody EmailDTO objDTO) {
 		try {
 			Usuario obj = servico.findByEmail(objDTO.getEmail());
 			return ResponseEntity.ok().body(obj);
-		}catch(UsernameNotFoundException e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-	    }catch(AuthenticacaoExcecao e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
-	    }catch(AuthorizationException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
-		}catch (DataIntegrityException e ) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
-		}catch( ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-		}catch( Excecao e) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
-		}	
+		} catch (UsernameNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (AuthenticacaoExcecao e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
+		} catch (AuthorizationException e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+		} catch (DataIntegrityException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		} catch (ObjectNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		}
 	}
-	
-	
-	@RequestMapping( method=RequestMethod.GET)
+
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> find() {
 		try {
-		List<Usuario> obj = servico.findAll();
-		return ResponseEntity.ok().body(obj);
-		}catch(UsernameNotFoundException e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-	    }catch(AuthenticacaoExcecao e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
-	    }catch(AuthorizationException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
-		}catch (DataIntegrityException e ) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
-		}catch( ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-		}catch( Excecao e) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
-		}	
+			List<Usuario> obj = servico.findAll();
+			return ResponseEntity.ok().body(obj);
+		} catch (UsernameNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (AuthenticacaoExcecao e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
+		} catch (AuthorizationException e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+		} catch (DataIntegrityException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		} catch (ObjectNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		}
 	}
-	
-	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<?> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id)  {
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<?> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
 		try {
-		
-		Usuario obj = servico.fromDTO(objDto);
-		obj.setId(id);
-		obj = servico.update(obj);
-		return ResponseEntity.ok().body("{\"message\": \"Usuário alterado com sucesso!\"}"); 
-		
-		}catch(UsernameNotFoundException e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-	    }catch(AuthenticacaoExcecao e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
-	    }catch(AuthorizationException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
-		}catch (DataIntegrityException e ) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
-		}catch( ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-		}catch( Excecao e) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
-		}	
+
+			Usuario obj = servico.fromDTO(objDto);
+			obj.setId(id);
+			obj = servico.update(obj);
+			return ResponseEntity.ok().body("{\"message\": \"Usuário alterado com sucesso!\"}");
+
+		} catch (UsernameNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (AuthenticacaoExcecao e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
+		} catch (AuthorizationException e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+		} catch (DataIntegrityException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		} catch (ObjectNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		}
 	}
-	
-	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		try {
-		
-		servico.delete(id);
-		return ResponseEntity.ok().body("{\"message\": \"Usuário excluído com sucesso!\"}");	
-		
-		}catch(UsernameNotFoundException e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-	    }catch(AuthenticacaoExcecao e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
-	    }catch(AuthorizationException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
-		}catch (DataIntegrityException e ) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
-		}catch( ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-		}catch( Excecao e) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
-		}	
+
+			servico.delete(id);
+			return ResponseEntity.ok().body("{\"message\": \"Usuário excluído com sucesso!\"}");
+
+		} catch (UsernameNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (AuthenticacaoExcecao e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
+		} catch (AuthorizationException e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+		} catch (DataIntegrityException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		} catch (ObjectNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+		} catch (Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		}
 	}
 }
