@@ -20,7 +20,7 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepos
 
 @Service
 public class DBServico {
-	
+	/*
 	@Autowired
 	private BCryptPasswordEncoder pe;
 	@Autowired
@@ -54,5 +54,6 @@ public class DBServico {
 				Funcao.GERENTE, pe.encode("123456"));
 		lg1.addPerfil(Perfil.ADMIN);
 		usuarioRepositorio.save(lg1);
-	}
+		
+	}*/
 }
