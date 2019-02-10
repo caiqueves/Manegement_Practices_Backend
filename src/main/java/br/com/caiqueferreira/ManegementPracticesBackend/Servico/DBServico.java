@@ -55,5 +55,6 @@ public class DBServico {
 		lg1.addPerfil(Perfil.ADMIN);
 		usuarioRepositorio.save(lg1);
 		
-	}*/
+	}
+	*/
 }
