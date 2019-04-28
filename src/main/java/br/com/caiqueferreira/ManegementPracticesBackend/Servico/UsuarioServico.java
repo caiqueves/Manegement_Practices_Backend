@@ -253,6 +253,7 @@ public class UsuarioServico {
 				Funcao.toEnum(objDto.getTipoFuncao()), null);
 
 		usu.setListaTipoMetodologia(listTpMetodologia);
+		
 		return usu;
 	}
 

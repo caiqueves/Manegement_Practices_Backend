@@ -75,7 +75,6 @@ public class TipoMetodologiaRecurso {
 		}
 	}
 
-	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> findAll() {
 		try {
@@ -127,7 +126,7 @@ public class TipoMetodologiaRecurso {
 		try {
 			servico.delete(id);
 			return ResponseEntity.badRequest().body("{\"message\": \"Metodologia excluída com sucesso!\"}");
-			
+
 		} catch (AuthenticacaoExcecao e) {
 			return ResponseEntity.badRequest()
 					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");

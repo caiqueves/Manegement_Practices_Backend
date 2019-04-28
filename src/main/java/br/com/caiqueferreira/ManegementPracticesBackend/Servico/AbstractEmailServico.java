@@ -29,8 +29,8 @@ public abstract class AbstractEmailServico implements EmailServico {
 		sm.setSentDate(new Date(System.currentTimeMillis()));
 		sm.setText("\nOlá,"  + lstDadosEmail.get(1).toUpperCase() +", "+ lstDadosEmail.get(4) 
 		+"\n\n" + lstDadosEmail.get(5) 
-		+ "\n\n    Email: " + lstDadosEmail.get(2).toUpperCase() 
-		+ "\n    Senha: " + lstDadosEmail.get(3).toUpperCase() 
+		+ "\n\n    Email: " + lstDadosEmail.get(2)
+		+ "\n    Senha: " + lstDadosEmail.get(3) 
 		+"\n\nCaso não tenha conhecimento dessa solicitação, pedimos que desconsidere o e-mail."
         +"\n\nAtt \nEquipe do APP Project Notification");
 		return sm;

@@ -73,13 +73,6 @@ public class PraticaServico {
 
 	public List<Pratica> findAll() {
 
-		UserSS user = UserService.authenticated();
-		if (user == null) {
-			throw new UsernameNotFoundException("O usuário não foi localizado.");
-		} else if (!user.hasRole(Perfil.ADMIN)) {
-			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
-		}
-
 		List<Pratica> pralist = repositorio.findAll();
 
 		if (pralist.isEmpty()) {
@@ -88,7 +81,8 @@ public class PraticaServico {
 
 		return pralist;
 	}
-
+    
+	/*
 	public Pratica findAleatoria() {
 		Pratica pra = find((int) BetweenRange(1, repositorio.findAleatoria()));
 		return pra;
@@ -98,7 +92,8 @@ public class PraticaServico {
 		double x = (Math.random() * ((max - min) + 1)) + min;
 		return x;
 	}
-
+    */
+	
 	public Pratica update(Pratica obj) {
 
 		UserSS user = UserService.authenticated();
