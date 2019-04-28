@@ -2,7 +2,7 @@ package br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums;
 
 public enum Funcao {
 
-	GERENTE(1, "GERENTE"), ANALISTA(2, "ANALISTA");
+	GERENTE(1, "GERENTE"), ANALISTA(2, "ANALISTA"), PROGRAMADOR(3,"PROGRAMADOR");
     
 	private int cod;
 	private String descricao;

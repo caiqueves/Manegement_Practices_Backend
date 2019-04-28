@@ -36,9 +36,7 @@ public class UsuarioRecurso {
 		try {
 			Usuario obj = servico.fromDTO(objDto);
 			obj = servico.insert(obj);
-			//URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-			//		.path("/{id}").buildAndExpand(obj.getId()).toUri();
-			//return ResponseEntity.created(uri).build();	
+			
 			return ResponseEntity.ok().body("{\"id\": \"" +obj.getId() + "\",\"message\": \"Usuário cadastrado com sucesso!\"}"); 
 		}catch(AuthenticacaoExcecao e) {
 		    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
@@ -70,27 +68,6 @@ public class UsuarioRecurso {
 			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
 		}	
 	}
-	
-	@RequestMapping(value = "/email", method = RequestMethod.POST)
-	public ResponseEntity<?> EsqueciSenha(@Valid @RequestBody EmailDTO objDTO) {
-		try {
-			Usuario obj = servico.findByEmail(objDTO.getEmail());
-			return ResponseEntity.ok().body(obj);
-		}catch(UsernameNotFoundException e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-	    }catch(AuthenticacaoExcecao e) {
-	    	return ResponseEntity.badRequest().body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}"); 
-	    }catch(AuthorizationException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}"); 
-		}catch (DataIntegrityException e ) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}");	
-		}catch( ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}"); 
-		}catch( Excecao e) {
-			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
-		}	
-	}
-	
 	
 	@RequestMapping( method=RequestMethod.GET)
 	public ResponseEntity<?> find() {

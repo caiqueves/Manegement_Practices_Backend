@@ -153,10 +153,10 @@ public class UsuarioServico {
 		UserSS user = UserService.authenticated();
 		if (user == null) {
 			throw new UsernameNotFoundException("O usuário não foi localizado.");
-		} else if (!user.hasRole(Perfil.ADMIN)) {
+		} else if (!obj.getId().equals(user.getId())) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
-
+			
 		try {
 
 			if ((obj.getCpfOuCnpj().length() == 11) && !BR.isValidCPF(obj.getCpfOuCnpj())) {
@@ -192,7 +192,7 @@ public class UsuarioServico {
 		UserSS user = UserService.authenticated();
 		if (user == null) {
 			throw new UsernameNotFoundException("O usuário não foi localizado.");
-		} else if (!user.hasRole(Perfil.ADMIN)) {
+		} else if (!id.equals(user.getId())) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
