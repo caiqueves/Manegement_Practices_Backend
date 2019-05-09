@@ -23,10 +23,6 @@ public class UsuarioNovoDTO implements Serializable {
 	@Email(message = "Email inválido")
 	private String email;
 
-	@NotEmpty(message = "Por favor, informe o Cpf Ou Cnpj. Preenchimento obrigatório !")
-	@Length(min = 11, max = 14, message = "O tamanho deve ser entre 11 e 14 caracteres")
-	private String cpfOuCnpj;
-
 	private Integer tipoFuncao;
 
 	@NotEmpty(message = "Por favor, informe a senha. Preenchimento obrigatório !")
@@ -57,14 +53,6 @@ public class UsuarioNovoDTO implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getCpfOuCnpj() {
-		return cpfOuCnpj;
-	}
-
-	public void setCpfOuCnpj(String cpfOuCnpj) {
-		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
 	public Integer getTipoFuncao() {

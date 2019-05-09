@@ -21,12 +21,6 @@ public class UsuarioInserirValidacao implements ConstraintValidator<UsuarioInser
 		
 		List<FieldMessage> list = new ArrayList<>();
 		
-		if ((objDto.getCpfOuCnpj().length() == 11) && !BR.isValidCPF(objDto.getCpfOuCnpj())) {
-			list.add(new FieldMessage("cpfOuCnpj", "CPF inválido"));
-		}
- 		if ((objDto.getCpfOuCnpj().length() == 14) && !BR.isValidCNPJ(objDto.getCpfOuCnpj())) {
-			list.add(new FieldMessage("cpfOuCnpj", "CNPJ inválido"));
-		}
  		for (FieldMessage e : list) {
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(e.getMessage()).addPropertyNode(e.getFieldName())

@@ -48,16 +48,6 @@ public class UsuarioServico {
 
 		try {
 
-			if ((obj.getCpfOuCnpj().length() == 11) && !BR.isValidCPF(obj.getCpfOuCnpj())) {
-				throw new Excecao("CPF inválido");
-			}
-			if ((obj.getCpfOuCnpj().length() == 14) && !BR.isValidCNPJ(obj.getCpfOuCnpj())) {
-				throw new Excecao("CNPJ inválido");
-			}
-
-			if (findByCpfOuCnpj(obj.getCpfOuCnpj()) != null)
-				throw new Excecao("Já existe um cadastro para o CPF:   " + obj.getCpfOuCnpj() + " informado.");
-
 			if (findByEmail(obj.getEmail()) != null)
 				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
 
@@ -138,16 +128,6 @@ public class UsuarioServico {
 		return usu;
 	}
 
-	public Usuario findByCpfOuCnpj(String CpfOuCnpj) {
-
-		Usuario usu = usuarioRepositorio.findByCpfOuCnpj(CpfOuCnpj);
-		if (usu == null) {
-			new ObjectNotFoundException(
-					"CpfOuCnpj : " + CpfOuCnpj + "não encontrado , Tipo: " + Usuario.class.getName());
-		}
-		return usu;
-	}
-
 	public Usuario update(Usuario obj) {
 
 		UserSS user = UserService.authenticated();
@@ -158,16 +138,6 @@ public class UsuarioServico {
 		}
 			
 		try {
-
-			if ((obj.getCpfOuCnpj().length() == 11) && !BR.isValidCPF(obj.getCpfOuCnpj())) {
-				throw new Excecao("CPF inválido");
-			}
-			if ((obj.getCpfOuCnpj().length() == 14) && !BR.isValidCNPJ(obj.getCpfOuCnpj())) {
-				throw new Excecao("CNPJ inválido");
-			}
-
-			if (findByCpfOuCnpj(obj.getCpfOuCnpj()) != null)
-				throw new Excecao("Já existe um cadastro para o CPF:   " + obj.getCpfOuCnpj() + " informado.");
 
 			if (findByEmail(obj.getEmail()) != null)
 				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
@@ -225,7 +195,7 @@ public class UsuarioServico {
 			listTpMetodologia.add(tpMeto);
 		}
 
-		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(),
+		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(),
 				Funcao.toEnum(objDto.getTipoFuncao()), objDto.getSenha());
 
 		usu.setListaTipoMetodologia(listTpMetodologia);
@@ -249,7 +219,7 @@ public class UsuarioServico {
 			listTpMetodologia.add(tpMeto);
 		}
 
-		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(), null,
+		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(),
 				Funcao.toEnum(objDto.getTipoFuncao()), null);
 
 		usu.setListaTipoMetodologia(listTpMetodologia);

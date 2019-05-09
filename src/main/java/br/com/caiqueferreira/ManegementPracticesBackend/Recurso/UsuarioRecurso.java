@@ -36,7 +36,6 @@ public class UsuarioRecurso {
 		try {
 			Usuario obj = servico.fromDTO(objDto);
 			obj = servico.insert(obj);
-<<<<<<< HEAD
 			
 			return ResponseEntity.ok().body("{\"id\": \"" +obj.getId() + "\",\"message\": \"Usuário cadastrado com sucesso!\"}"); 
 		}catch(AuthenticacaoExcecao e) {
@@ -48,21 +47,6 @@ public class UsuarioRecurso {
 		}catch( Excecao e) {
 			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage()+"\"}"); 
 		}		
-=======
-			return ResponseEntity.ok()
-					.body("{\"id\": \"" + obj.getId() + "\",\"message\": \"Usuário cadastrado com sucesso!\"}");
-		} catch (AuthenticacaoExcecao e) {
-			return ResponseEntity.badRequest()
-					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
-		} catch (AuthorizationException e) {
-			return ResponseEntity.badRequest()
-					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
-		} catch (DataIntegrityException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
-		} catch (Excecao e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
-		}
->>>>>>> 95872611d776708624dd172b294876200f63127c
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -86,10 +70,6 @@ public class UsuarioRecurso {
 			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
 		}
 	}
-<<<<<<< HEAD
-	
-	@RequestMapping( method=RequestMethod.GET)
-=======
 
 	@RequestMapping(value = "/emailUsuario", method = RequestMethod.POST)
 	public ResponseEntity<?> findUsuarioEmail(@Valid @RequestBody EmailDTO objDTO) {
@@ -114,7 +94,6 @@ public class UsuarioRecurso {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
->>>>>>> 95872611d776708624dd172b294876200f63127c
 	public ResponseEntity<?> find() {
 		try {
 			List<Usuario> obj = servico.findAll();

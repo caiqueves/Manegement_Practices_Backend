@@ -39,9 +39,6 @@ public class Usuario implements Serializable {
 	@Column(unique = true)
 	private String email;
 
-	@Column(unique = true)
-	private String cpfOuCnpj;
-
 	private Integer tipoFuncao;
 
 	@JsonIgnore
@@ -62,12 +59,11 @@ public class Usuario implements Serializable {
 		addPerfil(Perfil.USUARIO);
 	}
 
-	public Usuario(Integer id, String nome, String email, String cpfOuCnpj, Funcao tipoFuncao, String senha) {
+	public Usuario(Integer id, String nome, String email, Funcao tipoFuncao, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
-		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipoFuncao = (tipoFuncao == null) ? null : tipoFuncao.getCod();
 		this.senha = senha;
 		addPerfil(Perfil.USUARIO);
@@ -95,14 +91,6 @@ public class Usuario implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getCpfOuCnpj() {
-		return cpfOuCnpj;
-	}
-
-	public void setCpfOuCnpj(String cpfOuCnpj) {
-		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
 	public Funcao getTipoFuncao() {
