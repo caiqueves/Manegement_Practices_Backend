@@ -8,7 +8,6 @@ import javax.validation.ConstraintValidatorContext;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioNovoDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.Recurso.Excecao.FieldMessage;
-import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.Utils.BR;
 
 public class UsuarioInserirValidacao implements ConstraintValidator<UsuarioInserir,UsuarioNovoDTO >{
 

@@ -26,7 +26,6 @@ import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataInte
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.Excecao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.ObjectNotFoundException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.UsernameNotFoundException;
-import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Validacoes.Utils.BR;
 
 @Service
 public class UsuarioServico {
@@ -177,53 +176,38 @@ public class UsuarioServico {
 
 	public Usuario fromDTO(UsuarioNovoDTO objDto) {
 
-		if (objDto.getTipoFuncao() == null || objDto.getTipoFuncao() == 0) {
+		if (objDto.getIdTipoFuncao() == null || objDto.getIdTipoFuncao() == 0) {
 			throw new Excecao("É necessário informar pelo menos uma função.");
 		}
 
-		if (objDto.getListaTipoMetodologia() == null ) {
+		if (objDto.getIdTipoMetodologia() == null || objDto.getIdTipoMetodologia() == 0) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
 		}
-
-		List<TipoMetodologia> listTpMetodologia = new ArrayList<>();
-
-		for (Integer i : objDto.getListaTipoMetodologia()) {
-			if (i == 0) {
-				throw new Excecao("É necessário informar pelo menos um tipo de metodologia diferente de zero.");
-			}
-			TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(i);
-			listTpMetodologia.add(tpMeto);
-		}
-
+		
+        TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(objDto.getIdTipoMetodologia());
+		
 		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(),
-				Funcao.toEnum(objDto.getTipoFuncao()), objDto.getSenha());
+				Funcao.toEnum(objDto.getIdTipoFuncao()),tpMeto,objDto.getSenha());
 
-		usu.setListaTipoMetodologia(listTpMetodologia);
 		return usu;
 	}
 
 	public Usuario fromDTO(UsuarioDTO objDto) {
 
-		if (objDto.getTipoFuncao() == null || objDto.getTipoFuncao() == 0) {
+		if (objDto.getIdTipoFuncao() == null || objDto.getIdTipoFuncao() == 0) {
 			throw new Excecao("É necessário informar pelo menos uma função.");
 		}
 
-		if (objDto.getListaTipoMetodologia() == null) {
+		if (objDto.getIdTipoMetodologia() == null || objDto.getIdTipoMetodologia() == 0) {
 			throw new Excecao("É necessário informar pelo menos um tipo de metodologia.");
 		}
 
-		List<TipoMetodologia> listTpMetodologia = new ArrayList<>();
-
-		for (Integer i : objDto.getListaTipoMetodologia()) {
-			TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(i);
-			listTpMetodologia.add(tpMeto);
-		}
-
-		Usuario usu = new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(),
-				Funcao.toEnum(objDto.getTipoFuncao()), null);
-
-		usu.setListaTipoMetodologia(listTpMetodologia);
+        TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(objDto.getIdTipoMetodologia());
 		
+        
+		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(),
+				Funcao.toEnum(objDto.getIdTipoFuncao()),tpMeto,objDto.getSenha());
+
 		return usu;
 	}
 
@@ -233,6 +217,6 @@ public class UsuarioServico {
 		newObj.setEmail(obj.getEmail());
 		newObj.setTipoFuncao(obj.getTipoFuncao());
 		newObj.setSenha(newObj.getSenha());
-		newObj.setListaTipoMetodologia(obj.getListaTipoMetodologia());
+		newObj.setTipoMetodologia(obj.getTipoMetodologia());
 	}
 }

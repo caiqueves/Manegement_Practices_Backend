@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.EmailDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioDTO;
-import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioNovoDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.UsuarioServico;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthenticacaoExcecao;
@@ -32,7 +31,7 @@ public class UsuarioRecurso {
 	private UsuarioServico servico;
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> insert(@Valid @RequestBody UsuarioNovoDTO objDto) throws Excecao {
+	public ResponseEntity<?> insert(@Valid @RequestBody UsuarioDTO objDto) throws Excecao {
 		try {
 			Usuario obj = servico.fromDTO(objDto);
 			obj = servico.insert(obj);
@@ -71,10 +70,10 @@ public class UsuarioRecurso {
 		}
 	}
 
-	@RequestMapping(value = "/emailUsuario", method = RequestMethod.POST)
-	public ResponseEntity<?> findUsuarioEmail(@Valid @RequestBody EmailDTO objDTO) {
+	@RequestMapping(value = "/emailUsuario/{email}", method = RequestMethod.GET)
+	public ResponseEntity<?> findUsuarioEmail(@PathVariable String email) {
 		try {
-			Usuario obj = servico.findByEmail(objDTO.getEmail());
+			Usuario obj = servico.findByEmail(email);
 			return ResponseEntity.ok().body(obj);
 		} catch (UsernameNotFoundException e) {
 			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");

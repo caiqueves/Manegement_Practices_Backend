@@ -1,7 +1,5 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.DTO;
 
-import java.util.List;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
@@ -22,14 +20,16 @@ public class UsuarioDTO {
 	@Email(message = "Email inválido")
 	private String email;
 	
-	private Integer tipoFuncao;
+	private Integer IdTipoFuncao;
 	
-	//private String senha;
+	
+	private String senha;
     
-	private List<Integer> listaTipoMetodologia;
+	private Integer IdTipoMetodologia;
 	
 	public UsuarioDTO() {}
 
+	/*
 	public UsuarioDTO(Usuario obj) 
 	{	
 		id = obj.getId();
@@ -37,7 +37,7 @@ public class UsuarioDTO {
 		email = obj.getEmail();
 		//senha = obj.getSenha();	
 	}
-
+   */
 	public Integer getId() {
 		return id;
 	}
@@ -62,28 +62,26 @@ public class UsuarioDTO {
 		this.email = email;
 	}
 
-	public Integer getTipoFuncao() {
-		return tipoFuncao;
+	public Integer getIdTipoFuncao() {
+		return IdTipoFuncao;
 	}
 
-	public void setTipoFuncao(Integer tipoFuncao) {
-		this.tipoFuncao = tipoFuncao;
+	public void setIdTipoFuncao(Integer idTipoFuncao) {
+		IdTipoFuncao = idTipoFuncao;
+	}
+
+	public Integer getIdTipoMetodologia() {
+		return IdTipoMetodologia;
+	}
+
+	public void setIdTipoMetodologia(Integer idTipoMetodologia) {
+		IdTipoMetodologia = idTipoMetodologia;
 	}
     
-	/*
 	public String getSenha() {
 		return senha;
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-    */
-	
-	public List<Integer> getListaTipoMetodologia() {
-		return listaTipoMetodologia;
-	}
-
-	public void setListaTipoMetodologia(List<Integer> listaTipoMetodologia) {
-		this.listaTipoMetodologia = listaTipoMetodologia;
-	}
+	}	
 }

@@ -1,9 +1,7 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Dominio;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,8 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,25 +45,31 @@ public class Usuario implements Serializable {
 	@CollectionTable(name = "PERFIL_USUARIO")
 	private Set<Integer> Perfil_ID = new HashSet<>();
 
+	/*
 	@ManyToMany
 	@JoinTable(name = "Usuario_TipoMetodologia", joinColumns = {
 			@JoinColumn(name = "id_usuario") }, inverseJoinColumns = { @JoinColumn(name = "id_tipoMetodologia") })
 	private List<TipoMetodologia> listaTipoMetodologia = new ArrayList<>();
-
+    */
 	
+	
+	@ManyToOne
+    @JoinColumn(name = "tipoMetodologia_id")
+    private TipoMetodologia tipoMetodologia;
 	
 	public Usuario() {
 		addPerfil(Perfil.USUARIO);
 	}
 
-	public Usuario(Integer id, String nome, String email, Funcao tipoFuncao, String senha) {
+	public Usuario(Integer id, String nome, String email, Funcao tipoFuncao, TipoMetodologia tipoMetodologia,  String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.tipoFuncao = (tipoFuncao == null) ? null : tipoFuncao.getCod();
+		this.tipoMetodologia = tipoMetodologia; 
 		this.senha = senha;
-		addPerfil(Perfil.USUARIO);
+		addPerfil(Perfil.USUARIO);	
 	}
 
 	public Integer getId() {
@@ -108,7 +111,8 @@ public class Usuario implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
+    
+	/*
 	public List<TipoMetodologia> getListaTipoMetodologia() {
 		return listaTipoMetodologia;
 	}
@@ -116,6 +120,16 @@ public class Usuario implements Serializable {
 	public void setListaTipoMetodologia(List<TipoMetodologia> listaTipoMetodologia) {
 		this.listaTipoMetodologia = listaTipoMetodologia;
 	}
+	*/
+	
+	public TipoMetodologia getTipoMetodologia() {
+		return tipoMetodologia;
+	}
+
+	public void setTipoMetodologia(TipoMetodologia tipoMetodologia) {
+		this.tipoMetodologia = tipoMetodologia;
+	}
+	
 	
 	public Set<Perfil> getPerfis() {
 		return Perfil_ID.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());

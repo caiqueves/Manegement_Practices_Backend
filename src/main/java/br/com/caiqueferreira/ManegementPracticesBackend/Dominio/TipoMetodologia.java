@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -29,9 +29,16 @@ public class TipoMetodologia implements Serializable {
 	private String descricao;
 
 	@JsonIgnore
+	
+	@OneToMany
+    @JoinColumn(name = "tipoMetodologia_id") // Esta coluna está na tabela "usuario".
+    private List<Usuario> usuario;
+	
+	/*
 	@ManyToMany(mappedBy = "listaTipoMetodologia")
 	private List<Usuario> usuarios = new ArrayList<>();
-
+    */
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "tipoMetodologia", cascade = CascadeType.ALL)
 	private List<Pratica> praticas = new ArrayList<>();
@@ -61,13 +68,14 @@ public class TipoMetodologia implements Serializable {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
-	public List<Usuario> getUsuarios() {
-		return usuarios;
+    
+	
+	public List<Usuario> getUsuario() {
+		return usuario;
 	}
 
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
+	public void setUsuario(List<Usuario> usuario) {
+		this.usuario = usuario;
 	}
 
 	public List<Pratica> getPraticas() {

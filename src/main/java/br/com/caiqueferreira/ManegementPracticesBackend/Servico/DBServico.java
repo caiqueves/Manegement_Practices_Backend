@@ -2,11 +2,25 @@ package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
 
 
+import java.text.ParseException;
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Pratica;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Funcao;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.PraticaRepositorio;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.TipoMetodologiaRepositorio;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
 
 @Service
 public class DBServico {
-	/*
+	
 	@Autowired
 	private BCryptPasswordEncoder pe;
 	@Autowired
@@ -21,9 +35,9 @@ public class DBServico {
 	@Autowired
 	public void instantiateTestDatabase() throws ParseException {
 		
-		TipoMetodologia tipomet1 = new TipoMetodologia(null,"Metodologias Tradicionais");
-	    TipoMetodologia tipomet2 = new TipoMetodologia(null,"Metodologias Ageis");
-		TipoMetodologia tipomet3 = new TipoMetodologia(null,"Metodologias 3.0");
+		TipoMetodologia tipomet1 = new TipoMetodologia(null,"Tradicionais".toUpperCase());
+	    TipoMetodologia tipomet2 = new TipoMetodologia(null,"Ageis".toUpperCase());
+		TipoMetodologia tipomet3 = new TipoMetodologia(null,"3.0".toUpperCase());
 		
 		tipoMetodologiaRepositorio.saveAll(Arrays.asList(tipomet1,tipomet2,tipomet3));
 			
@@ -36,11 +50,11 @@ public class DBServico {
                 
 		praticaRepositorio.saveAll(Arrays.asList(pra1));
 		
-		Usuario lg1 = new Usuario(null, "caique ferreira","caique.sire@gmail.com", "09157332428",
-				Funcao.GERENTE, pe.encode("123456"));
+		Usuario lg1 = new Usuario(null, "caique ferreira","caique.sire@gmail.com",
+				Funcao.GERENTE,tipomet1, pe.encode("123456"));
 		lg1.addPerfil(Perfil.ADMIN);
 		usuarioRepositorio.save(lg1);
 		
 	}
-	*/
+	
 }

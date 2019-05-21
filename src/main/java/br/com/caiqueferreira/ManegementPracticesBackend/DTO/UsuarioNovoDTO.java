@@ -1,7 +1,6 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.DTO;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -23,13 +22,13 @@ public class UsuarioNovoDTO implements Serializable {
 	@Email(message = "Email inválido")
 	private String email;
 
-	private Integer tipoFuncao;
+	private Integer idTipoFuncao;
 
 	@NotEmpty(message = "Por favor, informe a senha. Preenchimento obrigatório !")
 	@Length(min = 6, max = 10, message = "O tamanho deve ter entre 6 a 10 caracteres")
 	private String senha;
 
-	private List<Integer> listaTipoMetodologia;
+	private Integer idTipoMetodologia;
 
 	public Integer getId() {
 		return id;
@@ -55,20 +54,33 @@ public class UsuarioNovoDTO implements Serializable {
 		this.email = email;
 	}
 
-	public Integer getTipoFuncao() {
-		return tipoFuncao;
-	}
-
-	public void setTipoFuncao(Integer tipoFuncao) {
-		this.tipoFuncao = tipoFuncao;
-	}
-
+	
+	/*
 	public List<Integer> getListaTipoMetodologia() {
 		return listaTipoMetodologia;
 	}
 
 	public void setListaTipoMetodologia(List<Integer> listaTipoMetodologia) {
 		this.listaTipoMetodologia = listaTipoMetodologia;
+	}
+    */
+	
+	
+	
+	public Integer getIdTipoFuncao() {
+		return idTipoFuncao;
+	}
+
+	public void setIdTipoFuncao(Integer idTipoFuncao) {
+		this.idTipoFuncao = idTipoFuncao;
+	}
+
+	public Integer getIdTipoMetodologia() {
+		return idTipoMetodologia;
+	}
+
+	public void setIdTipoMetodologia(Integer idTipoMetodologia) {
+		this.idTipoMetodologia = idTipoMetodologia;
 	}
 
 	public String getSenha() {

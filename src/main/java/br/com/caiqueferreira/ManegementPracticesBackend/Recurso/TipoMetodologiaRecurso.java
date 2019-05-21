@@ -35,9 +35,7 @@ public class TipoMetodologiaRecurso {
 		try {
 			TipoMetodologia obj = servico.fromDTO(objDto);
 			obj = servico.insert(obj);
-			// URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-			// .path("/{id}").buildAndExpand(obj.getId()).toUri();
-			// return ResponseEntity.created(uri).build();
+			
 			return ResponseEntity.badRequest()
 					.body("{\"id\": \"" + obj.getId() + "\",\"message\": \"Metodologia cadastrada com sucesso !\"}");
 
