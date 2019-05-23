@@ -5,8 +5,6 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
-
 //@JsonPropertyOrder({"id","nome","email","tipoFuncao","senha","listaTipoMetodologia"})
 public class UsuarioDTO {
 

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.caiqueferreira.ManegementPracticesBackend.DTO.EmailDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.UsuarioDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.UsuarioServico;
