@@ -58,13 +58,14 @@ public class PraticaRecurso {
 		try {
 			Pratica obj = servico.find(id);
 			return ResponseEntity.ok().body(obj);
-
+/*
 		} catch (AuthenticacaoExcecao e) {
 			return ResponseEntity.badRequest()
 					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
 		} catch (AuthorizationException e) {
 			return ResponseEntity.badRequest()
 					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+*/
 		} catch (DataIntegrityException e) {
 			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
 		} catch (ObjectNotFoundException e) {
@@ -80,13 +81,14 @@ public class PraticaRecurso {
 		try {
 			List<Pratica> obj = servico.findAll();
 			return ResponseEntity.ok().body(obj);
-
+/*
 		} catch (AuthenticacaoExcecao e) {
 			return ResponseEntity.badRequest()
 					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
 		} catch (AuthorizationException e) {
 			return ResponseEntity.badRequest()
 					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+*/
 		} catch (DataIntegrityException e) {
 			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
 		} catch (ObjectNotFoundException e) {
@@ -96,6 +98,28 @@ public class PraticaRecurso {
 		}
 	}
 
+	@RequestMapping(value = "findTipoMetodologia/{idUsuario}", method = RequestMethod.GET)
+	public ResponseEntity<?> findPraticaTipoMetodologia(@PathVariable Integer idUsuario) {
+		try {
+			Pratica obj = servico.findQtdPraticaTipoMetodologia(idUsuario);
+			return ResponseEntity.ok().body(obj);
+
+		} catch (AuthenticacaoExcecao e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"Não foi possível efetuar a authenticacao com o servidor.\"}");
+		} catch (AuthorizationException e) {
+			return ResponseEntity.badRequest()
+					.body("{\"message\": \"O Usuário não tem permissão para acessar esse serviço\"}");
+
+		} catch (DataIntegrityException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		} catch (ObjectNotFoundException e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"Prática não encontrada!\"}");
+		} catch (Excecao e) {
+			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
+		}
+	}
+	
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> update(@Valid @RequestBody PraticaDTO objDto, @PathVariable Integer id) {

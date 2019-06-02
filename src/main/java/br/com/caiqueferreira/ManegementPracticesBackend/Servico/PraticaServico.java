@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import br.com.caiqueferreira.ManegementPracticesBackend.DTO.PraticaDTO;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Pratica;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
 import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.PraticaRepositorio;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
 import br.com.caiqueferreira.ManegementPracticesBackend.Segurança.UserSS;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.AuthorizationException;
 import br.com.caiqueferreira.ManegementPracticesBackend.Servico.Excecao.DataIntegrityException;
@@ -27,8 +29,12 @@ public class PraticaServico {
 	@Autowired
 	private PraticaRepositorio repositorio;
 
-	@Autowired
+	private UsuarioServico usuServico;
+	
 	private TipoMetodologiaServico tipoMetodologiaServico;
+	
+	@Autowired
+	private UsuarioRepositorio usuarioRepositorio;
 
 	@Transactional
 	public Pratica insert(Pratica obj) {
@@ -82,24 +88,48 @@ public class PraticaServico {
 		return pralist;
 	}
     
-	/*
-	public Pratica findAleatoria() {
-		Pratica pra = find((int) BetweenRange(1, repositorio.findAleatoria()));
-		return pra;
-	}
+	public Pratica findQtdPraticaTipoMetodologia(int idUsuario) {
+	    
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new UsernameNotFoundException("O usuário não foi localizado.");
+		}
+		Optional<Usuario> obj = usuarioRepositorio.findById(idUsuario);
 
-	public static double BetweenRange(double min, double max) {
+		Usuario usuario = obj.get();
+		TipoMetodologia tipoMetodologia = usuario.getTipoMetodologia();
+		
+		int valor = tipoMetodologia.getId();
+		Integer QtdPratica = 0;
+		
+		if (valor == 1) {
+		    QtdPratica = repositorio.findQtdPraticaTipoMetodologia1();
+		}
+		else if (valor == 2) {
+			QtdPratica = repositorio.findQtdPraticaTipoMetodologia2();
+		}
+		else if (valor == 3) {
+			QtdPratica = repositorio.findQtdPraticaTipoMetodologia3();
+		}
+		
+		
+		int IdPratica = (int) BetweenRange(1,QtdPratica);
+		
+		Optional<Pratica> pratica = repositorio.findById(IdPratica);
+
+		return find(IdPratica);
+	}
+	
+	private  double BetweenRange(double min, double max) {
 		double x = (Math.random() * ((max - min) + 1)) + min;
 		return x;
 	}
-    */
+    
 	
 	public Pratica update(Pratica obj) {
 
 		UserSS user = UserService.authenticated();
-		if (user == null) {
-			throw new UsernameNotFoundException("O usuário não foi localizado.");
-		} else if (!user.hasRole(Perfil.ADMIN)) {
+		if (user == null || !user.hasRole(Perfil.ADMIN)) {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
