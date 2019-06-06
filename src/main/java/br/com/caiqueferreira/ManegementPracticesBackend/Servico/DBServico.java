@@ -2,7 +2,21 @@ package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
 
 
+import java.text.ParseException;
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Pratica;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.TipoMetodologia;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.Usuario;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Funcao;
+import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.PraticaRepositorio;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.TipoMetodologiaRepositorio;
+import br.com.caiqueferreira.ManegementPracticesBackend.Repositorio.UsuarioRepositorio;
 
 @Service
 public class DBServico {
