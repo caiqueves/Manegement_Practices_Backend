@@ -138,10 +138,14 @@ public class UsuarioServico {
 			
 		try {
 
-			if (findByEmail(obj.getEmail()) != null)
-				throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
-
 			Usuario newObj = find(obj.getId());
+			
+			if (!newObj.getEmail().contains(obj.getEmail())) 
+			{
+				if (findByEmail(obj.getEmail()) != null)
+					throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
+			}
+			
 			updateData(newObj, obj);
 
 			try {
