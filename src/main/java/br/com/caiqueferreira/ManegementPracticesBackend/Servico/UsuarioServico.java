@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -139,11 +140,21 @@ public class UsuarioServico {
 		try {
 
 			Usuario newObj = find(obj.getId());
-			
+			String senhapassadaCriptografada;
+			String NovaSenha = "";
 			if (!newObj.getEmail().contains(obj.getEmail())) 
 			{
 				if (findByEmail(obj.getEmail()) != null)
 					throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
+			}
+			
+			senhapassadaCriptografada = pe.encode(obj.getSenha());
+			
+			boolean retorno = BCrypt.checkpw(newObj.getSenha(),senhapassadaCriptografada );
+			
+			if (retorno == false) {
+				 NovaSenha = obj.getSenha();
+				 obj.setSenha(senhapassadaCriptografada);
 			}
 			
 			updateData(newObj, obj);
@@ -153,7 +164,9 @@ public class UsuarioServico {
 			} catch (DataIntegrityViolationException e) {
 				throw new DataIntegrityException("Não foi possível atualizar o usuário.");
 			}
-
+			
+			emailService.sendNewPasswordEmail(newObj, NovaSenha);	
+			
 			return newObj;
 		} catch (Excecao e) {
 			throw new Excecao(e.getMessage());
@@ -208,7 +221,6 @@ public class UsuarioServico {
 
         TipoMetodologia tpMeto = (TipoMetodologia) tipoMetodologiaServico.find(objDto.getIdTipoMetodologia());
 		
-        
 		Usuario usu = new Usuario(null, objDto.getNome(), objDto.getEmail(),
 				Funcao.toEnum(objDto.getIdTipoFuncao()),tpMeto,objDto.getSenha());
 
@@ -220,7 +232,7 @@ public class UsuarioServico {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 		newObj.setTipoFuncao(obj.getTipoFuncao());
-		newObj.setSenha(newObj.getSenha());
+		newObj.setSenha(obj.getSenha());
 		newObj.setTipoMetodologia(obj.getTipoMetodologia());
 	}
 }
