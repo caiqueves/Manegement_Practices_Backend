@@ -17,8 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Funcao;
 import br.com.caiqueferreira.ManegementPracticesBackend.Dominio.enums.Perfil;
 

@@ -133,7 +133,7 @@ public class UsuarioRecurso {
 		} catch (DataIntegrityException e) {
 			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
 		} catch (ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Usuário não encontrado!\"}");
+			return ResponseEntity.badRequest().body("{\"message\": \""+e.getMessage() +"\"}");
 		} catch (Excecao e) {
 			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
 		}

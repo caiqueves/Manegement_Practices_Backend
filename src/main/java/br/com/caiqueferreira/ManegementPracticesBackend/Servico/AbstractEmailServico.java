@@ -57,6 +57,24 @@ public abstract class AbstractEmailServico implements EmailServico {
 		return sm;
 	}
 	
+    public void sendDeleteCadastro(Usuario obj) {
+		
+		SimpleMailMessage sm = prepareDeleteCadastro(obj);
+		sendEmail(sm);
+	}
+
+	private SimpleMailMessage prepareDeleteCadastro(Usuario obj) {
+		
+		SimpleMailMessage sm = new SimpleMailMessage();
+		sm.setTo(obj.getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("[Project Notification] Exclusão do Cadastro");
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText("\nOlá,"  + obj.getNome().toUpperCase()  
+		+ "!\nSeu cadastro no aplicativo Project Notification foi excluído." 
+        +"\n\nAtt \nEquipe do APP Project Notification");
+		return sm;
+	}
 	
 	
 }

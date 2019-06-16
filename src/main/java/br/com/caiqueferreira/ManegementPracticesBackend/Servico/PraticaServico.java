@@ -29,8 +29,6 @@ public class PraticaServico {
 	@Autowired
 	private PraticaRepositorio repositorio;
 
-	private UsuarioServico usuServico;
-	
 	private TipoMetodologiaServico tipoMetodologiaServico;
 	
 	@Autowired
@@ -99,24 +97,22 @@ public class PraticaServico {
 		Usuario usuario = obj.get();
 		TipoMetodologia tipoMetodologia = usuario.getTipoMetodologia();
 		
-		int valor = tipoMetodologia.getId();
-		Integer QtdPratica = 0;
-		
-		if (valor == 1) {
-		    QtdPratica = repositorio.findQtdPraticaTipoMetodologia1();
+		int QtdPratica = 0;
+			
+		switch(tipoMetodologia.getId()) 
+		{
+			case 1: QtdPratica = repositorio.findQtdPraticaTipoMetodologia1();
+			        if (QtdPratica == 0) throw new ObjectNotFoundException ("");
+			        
+			case 2: QtdPratica = repositorio.findQtdPraticaTipoMetodologia2();
+	                if (QtdPratica == 0) throw new ObjectNotFoundException ("");
+	                
+			case 3: QtdPratica = repositorio.findQtdPraticaTipoMetodologia2();
+	                if (QtdPratica == 0) throw new ObjectNotFoundException ("");		
 		}
-		else if (valor == 2) {
-			QtdPratica = repositorio.findQtdPraticaTipoMetodologia2();
-		}
-		else if (valor == 3) {
-			QtdPratica = repositorio.findQtdPraticaTipoMetodologia3();
-		}
-		
 		
 		int IdPratica = (int) BetweenRange(1,QtdPratica);
-		
-		Optional<Pratica> pratica = repositorio.findById(IdPratica);
-
+				
 		return find(IdPratica);
 	}
 	
@@ -193,4 +189,6 @@ public class PraticaServico {
 		newObj.setFonte(obj.getFonte());
 		newObj.setTipoMetodologia(obj.getTipoMetodologia());
 	}
+	
+	
 }

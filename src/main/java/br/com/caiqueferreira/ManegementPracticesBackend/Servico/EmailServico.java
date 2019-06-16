@@ -14,5 +14,6 @@ public interface EmailServico {
 	
 	void sendNewPasswordEmail(Usuario usu, String novaSenha);
 	
+	void sendDeleteCadastro(Usuario usu);
 	
 }

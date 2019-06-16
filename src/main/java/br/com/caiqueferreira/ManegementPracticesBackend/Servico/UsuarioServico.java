@@ -142,18 +142,19 @@ public class UsuarioServico {
 			Usuario newObj = find(obj.getId());
 			String senhapassadaCriptografada;
 			String NovaSenha = "";
+			
 			if (!newObj.getEmail().contains(obj.getEmail())) 
 			{
 				if (findByEmail(obj.getEmail()) != null)
 					throw new Excecao("Já existe um cadastro para o Email: " + obj.getEmail() + " informado.");
 			}
 			
+			NovaSenha = obj.getSenha();
 			senhapassadaCriptografada = pe.encode(obj.getSenha());
 			
 			boolean retorno = BCrypt.checkpw(newObj.getSenha(),senhapassadaCriptografada );
 			
 			if (retorno == false) {
-				 NovaSenha = obj.getSenha();
 				 obj.setSenha(senhapassadaCriptografada);
 			}
 			
@@ -165,7 +166,10 @@ public class UsuarioServico {
 				throw new DataIntegrityException("Não foi possível atualizar o usuário.");
 			}
 			
-			emailService.sendNewPasswordEmail(newObj, NovaSenha);	
+			if (retorno == false)
+			{
+			   emailService.sendNewPasswordEmail(newObj, NovaSenha);	
+			}
 			
 			return newObj;
 		} catch (Excecao e) {
@@ -182,13 +186,21 @@ public class UsuarioServico {
 			throw new AuthorizationException("O seu usuário não tem permissão ao serviço.");
 		}
 
-		find(id);
-
-		try {
-			usuarioRepositorio.deleteById(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não foi possível excluir o usuário. Tipo: " + e.getMessage());
+		Usuario usuario = new Usuario();
+		if ((usuario = (find(id))) != null)
+		{
+			try {
+				usuarioRepositorio.deleteById(id);
+			} catch (DataIntegrityViolationException e) {
+				throw new DataIntegrityException("Não foi possível excluir o usuário. Tipo: " + e.getMessage());
+			}
+			
+			emailService.sendDeleteCadastro(usuario);
 		}
+		else {
+			throw new ObjectNotFoundException("Não existe registro para o usuário informado");
+		}
+		 
 	}
 
 	public Usuario fromDTO(UsuarioNovoDTO objDto) {

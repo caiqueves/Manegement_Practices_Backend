@@ -114,7 +114,7 @@ public class PraticaRecurso {
 		} catch (DataIntegrityException e) {
 			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
 		} catch (ObjectNotFoundException e) {
-			return ResponseEntity.badRequest().body("{\"message\": \"Prática não encontrada!\"}");
+			return ResponseEntity.badRequest().body("{\"message\": \"Não existe prática para a metodologia informada\"}");
 		} catch (Excecao e) {
 			return ResponseEntity.badRequest().body("{\"message\": \"" + e.getMessage() + "\"}");
 		}
