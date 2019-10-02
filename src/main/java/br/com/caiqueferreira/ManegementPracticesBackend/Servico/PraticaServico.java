@@ -1,7 +1,5 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
-import static org.mockito.Mockito.never;
-
 import java.util.List;
 import java.util.Optional;
 
