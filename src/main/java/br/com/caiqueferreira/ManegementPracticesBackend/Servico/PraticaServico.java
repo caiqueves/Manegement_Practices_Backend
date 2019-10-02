@@ -1,5 +1,7 @@
 package br.com.caiqueferreira.ManegementPracticesBackend.Servico;
 
+import static org.mockito.Mockito.never;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -70,9 +72,14 @@ public class PraticaServico {
 	}
 
 	public Pratica find(Integer id) {
-		Optional<Pratica> obj = repositorio.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pratica.class.getName()));
+		
+		Pratica pratica = repositorio.findId(id);
+		
+		if (pratica == null) {
+			throw new ObjectNotFoundException ("");
+		}
+		
+		return pratica;
 	}
 
 	public List<Pratica> findAll() {
@@ -86,6 +93,7 @@ public class PraticaServico {
 		return pralist;
 	}
     
+	
 	public Pratica findQtdPraticaTipoMetodologia(int idUsuario) {
 	    
 		UserSS user = UserService.authenticated();
@@ -94,34 +102,61 @@ public class PraticaServico {
 		}
 		Optional<Usuario> obj = usuarioRepositorio.findById(idUsuario);
 
+		if (obj == null) {
+			throw new ObjectNotFoundException ("");
+		}
 		Usuario usuario = obj.get();
+		
+		if (usuario == null) {
+			throw new ObjectNotFoundException ("");
+		}
+		
 		TipoMetodologia tipoMetodologia = usuario.getTipoMetodologia();
 		
+		if (tipoMetodologia == null) {
+			throw new ObjectNotFoundException ("");
+		}
+		
+		List<Pratica> listaPratica = null;
 		int QtdPratica = 0;
+		int posicaoPratica = 0;
+		Pratica pratica = null;
 			
 		switch(tipoMetodologia.getId()) 
 		{
-			case 1: QtdPratica = repositorio.findQtdPraticaTipoMetodologia1();
+			case 1: 
+				    listaPratica = repositorio.findListaPraticaTipoMetodologia1();
+				    
+				    QtdPratica = listaPratica.size();
+				    
 			        if (QtdPratica == 0) throw new ObjectNotFoundException ("");
 			        
-			case 2: QtdPratica = repositorio.findQtdPraticaTipoMetodologia2();
-	                if (QtdPratica == 0) throw new ObjectNotFoundException ("");
-	                
-			case 3: QtdPratica = repositorio.findQtdPraticaTipoMetodologia2();
-	                if (QtdPratica == 0) throw new ObjectNotFoundException ("");		
+			        posicaoPratica = (int) BetweenRange(0,QtdPratica-1);
+			        
+			        pratica = listaPratica.get(posicaoPratica);
+			        
+			        
+			case 2: 
+				 listaPratica = repositorio.findListaPraticaTipoMetodologia2();
+				    
+				    QtdPratica = listaPratica.size();
+				    
+			        if (QtdPratica == 0) throw new ObjectNotFoundException ("");
+			        
+			        posicaoPratica = (int) BetweenRange(0,QtdPratica-1);
+			        
+			        pratica = listaPratica.get(posicaoPratica);     
 		}
 		
-		int IdPratica = (int) BetweenRange(1,QtdPratica);
-				
-		return find(IdPratica);
+		return pratica;
 	}
+	
 	
 	private  double BetweenRange(double min, double max) {
 		double x = (Math.random() * ((max - min) + 1)) + min;
 		return x;
 	}
     
-	
 	public Pratica update(Pratica obj) {
 
 		UserSS user = UserService.authenticated();
